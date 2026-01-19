@@ -92,7 +92,7 @@ export function IntegrationTile({
         e.currentTarget.style.borderColor = "var(--card-border)";
       }}
     >
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex flex-col xl:flex-row items-start justify-between mb-4 gap-2">
         <div className="flex items-center gap-4">
           <div
             className="p-3 rounded-xl transition-smooth group-hover:scale-110"
