@@ -1,6 +1,7 @@
 "use client";
 
 import type { Integration } from "@/lib/api";
+import { JSX } from "react";
 
 interface IntegrationTileProps {
   integration: Integration;
