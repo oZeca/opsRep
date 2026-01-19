@@ -6,57 +6,52 @@ interface AnomalyAlertProps {
   anomaly: Anomaly;
 }
 
-const severityStyles = {
+const severityConfig = {
   high: {
-    bg: "var(--danger-bg)",
-    border: "var(--danger-border)",
-    color: "var(--danger)",
+    bgClass: "bg-danger-bg",
+    borderClass: "border-danger-border",
+    colorClass: "text-danger",
   },
   medium: {
-    bg: "var(--warning-bg)",
-    border: "var(--warning-border)",
-    color: "var(--warning)",
+    bgClass: "bg-warning-bg",
+    borderClass: "border-warning-border",
+    colorClass: "text-warning",
   },
   low: {
-    bg: "var(--info-bg)",
-    border: "var(--info-border)",
-    color: "var(--info)",
+    bgClass: "bg-info-bg",
+    borderClass: "border-info-border",
+    colorClass: "text-info",
   },
 };
 
-const statusStyles = {
+const statusConfig = {
   investigating: {
-    bg: "var(--warning-bg)",
-    color: "var(--warning)",
+    bgClass: "bg-warning-bg",
+    colorClass: "text-warning",
   },
   acknowledged: {
-    bg: "var(--info-bg)",
-    color: "var(--info)",
+    bgClass: "bg-info-bg",
+    colorClass: "text-info",
   },
   resolved: {
-    bg: "var(--success-bg)",
-    color: "var(--success)",
+    bgClass: "bg-success-bg",
+    colorClass: "text-success",
   },
 };
 
 export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
-  const styles = severityStyles[anomaly.severity];
-  const status = statusStyles[anomaly.status];
+  const severity = severityConfig[anomaly.severity];
+  const status = statusConfig[anomaly.status];
 
   return (
     <div
-      className="glass-card p-5 transition-smooth"
-      style={{
-        backgroundColor: styles.bg,
-        border: `1px solid ${styles.border}`,
-      }}
+      className={`glass-card p-5 transition-smooth border ${severity.bgClass} ${severity.borderClass}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div
-            className="p-2 rounded-lg"
-            style={{ backgroundColor: styles.bg, color: styles.color }}
+            className={`p-2 rounded-lg ${severity.bgClass} ${severity.colorClass}`}
           >
             <svg
               className="w-5 h-5"
@@ -73,24 +68,18 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
             </svg>
           </div>
           <div>
-            <p className="font-medium" style={{ color: "var(--foreground)" }}>
-              {anomaly.title}
-            </p>
-            <p className="text-xs" style={{ color: "var(--foreground-muted)" }}>
-              {anomaly.metric}
-            </p>
+            <p className="font-medium text-foreground">{anomaly.title}</p>
+            <p className="text-xs text-foreground-muted">{anomaly.metric}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className="px-2 py-1 rounded-full text-xs font-medium uppercase"
-            style={{ backgroundColor: styles.bg, color: styles.color }}
+            className={`px-2 py-1 rounded-full text-xs font-medium uppercase ${severity.bgClass} ${severity.colorClass}`}
           >
             {anomaly.severity}
           </span>
           <span
-            className="px-2 py-1 rounded-full text-xs font-medium"
-            style={{ backgroundColor: status.bg, color: status.color }}
+            className={`px-2 py-1 rounded-full text-xs font-medium ${status.bgClass} ${status.colorClass}`}
           >
             {anomaly.status}
           </span>
@@ -98,42 +87,21 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
       </div>
 
       {/* Description */}
-      <p className="text-sm mb-4" style={{ color: "var(--foreground)" }}>
-        {anomaly.description}
-      </p>
+      <p className="text-sm mb-4 text-foreground">{anomaly.description}</p>
 
       {/* Current vs Expected */}
       {anomaly.currentValue !== undefined && anomaly.expectedRange && (
-        <div
-          className="flex items-center gap-4 p-3 rounded-lg mb-4"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-        >
+        <div className="flex items-center gap-4 p-3 rounded-lg mb-4 bg-black/20">
           <div>
-            <p
-              className="text-xs"
-              style={{ color: "var(--foreground-subtle)" }}
-            >
-              Current
-            </p>
-            <p
-              className="text-lg font-bold"
-              style={{ color: "var(--foreground)" }}
-            >
+            <p className="text-xs text-foreground-subtle">Current</p>
+            <p className="text-lg font-bold text-foreground">
               {anomaly.currentValue}
             </p>
           </div>
-          <div style={{ color: "var(--foreground-faint)" }}>→</div>
+          <div className="text-foreground-faint">→</div>
           <div>
-            <p
-              className="text-xs"
-              style={{ color: "var(--foreground-subtle)" }}
-            >
-              Expected Range
-            </p>
-            <p
-              className="text-lg font-bold"
-              style={{ color: "var(--foreground-muted)" }}
-            >
+            <p className="text-xs text-foreground-subtle">Expected Range</p>
+            <p className="text-lg font-bold text-foreground-muted">
               {anomaly.expectedRange[0]} - {anomaly.expectedRange[1]}
             </p>
           </div>
@@ -143,20 +111,16 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
       {/* Possible Causes */}
       {anomaly.possibleCauses && anomaly.possibleCauses.length > 0 && (
         <div className="mb-3">
-          <p
-            className="text-xs font-medium mb-2"
-            style={{ color: "var(--foreground-muted)" }}
-          >
+          <p className="text-xs font-medium mb-2 text-foreground-muted">
             Possible Causes
           </p>
           <ul className="space-y-1">
             {anomaly.possibleCauses.map((cause, i) => (
               <li
                 key={i}
-                className="text-xs flex items-start gap-2"
-                style={{ color: "var(--foreground-muted)" }}
+                className="text-xs flex items-start gap-2 text-foreground-muted"
               >
-                <span style={{ color: "var(--foreground-subtle)" }}>•</span>
+                <span className="text-foreground-subtle">•</span>
                 {cause}
               </li>
             ))}
@@ -167,20 +131,16 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
       {/* Recommended Actions */}
       {anomaly.recommendedActions && anomaly.recommendedActions.length > 0 && (
         <div>
-          <p
-            className="text-xs font-medium mb-2"
-            style={{ color: "var(--foreground-muted)" }}
-          >
+          <p className="text-xs font-medium mb-2 text-foreground-muted">
             Recommended Actions
           </p>
           <ul className="space-y-1">
             {anomaly.recommendedActions.map((action, i) => (
               <li
                 key={i}
-                className="text-xs flex items-start gap-2"
-                style={{ color: "var(--foreground-muted)" }}
+                className="text-xs flex items-start gap-2 text-foreground-muted"
               >
-                <span style={{ color: "var(--info)" }}>→</span>
+                <span className="text-info">→</span>
                 {action}
               </li>
             ))}
@@ -190,27 +150,14 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
 
       {/* Resolution */}
       {anomaly.status === "resolved" && anomaly.resolution && (
-        <div
-          className="mt-4 p-3 rounded-lg"
-          style={{
-            backgroundColor: "var(--success-bg)",
-            border: "1px solid var(--success-border)",
-          }}
-        >
-          <p
-            className="text-xs font-medium mb-1"
-            style={{ color: "var(--success)" }}
-          >
-            Resolution
-          </p>
-          <p className="text-xs" style={{ color: "var(--foreground)" }}>
-            {anomaly.resolution}
-          </p>
+        <div className="mt-4 p-3 rounded-lg bg-success-bg border border-success-border">
+          <p className="text-xs font-medium mb-1 text-success">Resolution</p>
+          <p className="text-xs text-foreground">{anomaly.resolution}</p>
         </div>
       )}
 
       {/* Timestamp */}
-      <p className="text-xs mt-4" style={{ color: "var(--foreground-faint)" }}>
+      <p className="text-xs mt-4 text-foreground-faint">
         Detected: {new Date(anomaly.detectedAt).toLocaleString()}
       </p>
     </div>

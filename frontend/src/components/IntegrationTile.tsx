@@ -43,25 +43,22 @@ const integrationIcons: Record<string, JSX.Element> = {
 
 const statusConfig = {
   connected: {
-    color: "var(--success)",
-    bg: "var(--success-bg)",
+    colorClass: "text-success",
+    bgClass: "bg-success-bg",
     label: "Connected",
-    dot: "var(--success)",
-    dotClass: "",
+    dotClass: "bg-success",
   },
   disconnected: {
-    color: "var(--muted)",
-    bg: "var(--muted-bg)",
+    colorClass: "text-muted",
+    bgClass: "bg-muted-bg",
     label: "Disconnected",
-    dot: "var(--muted)",
-    dotClass: "",
+    dotClass: "bg-muted",
   },
   pending: {
-    color: "var(--warning)",
-    bg: "var(--warning-bg)",
+    colorClass: "text-warning",
+    bgClass: "bg-warning-bg",
     label: "Pending",
-    dot: "var(--warning)",
-    dotClass: "animate-pulse",
+    dotClass: "bg-warning animate-pulse",
   },
 };
 
@@ -83,44 +80,26 @@ export function IntegrationTile({
   };
 
   return (
-    <div
-      className="glass-card p-6 transition-smooth group"
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "var(--info-border)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "var(--card-border)";
-      }}
-    >
+    <div className="glass-card p-6 transition-smooth group hover:border-info-border">
       <div className="flex flex-col xl:flex-row items-start justify-between mb-4 gap-2">
         <div className="flex items-center gap-4">
           <div
-            className="p-3 rounded-xl transition-smooth group-hover:scale-110"
-            style={{ backgroundColor: status.bg, color: status.color }}
+            className={`p-3 rounded-xl transition-smooth group-hover:scale-110 ${status.bgClass} ${status.colorClass}`}
           >
             {Icon}
           </div>
           <div>
-            <h3
-              className="font-semibold"
-              style={{ color: "var(--foreground)" }}
-            >
+            <h3 className="font-semibold text-foreground">
               {integration.name}
             </h3>
-            <p
-              className="text-xs capitalize"
-              style={{ color: "var(--foreground-subtle)" }}
-            >
+            <p className="text-xs capitalize text-foreground-subtle">
               {integration.type}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div
-            className={`w-2 h-2 rounded-full ${status.dotClass}`}
-            style={{ backgroundColor: status.dot }}
-          />
-          <span className="text-xs font-medium" style={{ color: status.color }}>
+          <div className={`w-2 h-2 rounded-full ${status.dotClass}`} />
+          <span className={`text-xs font-medium ${status.colorClass}`}>
             {status.label}
           </span>
         </div>
@@ -130,134 +109,57 @@ export function IntegrationTile({
       {integration.status === "connected" && (
         <div className="grid grid-cols-2 gap-4 mb-4">
           {integration.channelsConnected !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Channels
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Channels</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.channelsConnected}
               </p>
             </div>
           )}
           {integration.messagesIndexed !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Messages
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Messages</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.messagesIndexed.toLocaleString()}
               </p>
             </div>
           )}
           {integration.pagesIndexed !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Pages
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Pages</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.pagesIndexed}
               </p>
             </div>
           )}
           {integration.databasesConnected !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Databases
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Databases</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.databasesConnected}
               </p>
             </div>
           )}
           {integration.transactionsTracked !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Transactions
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Transactions</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.transactionsTracked.toLocaleString()}
               </p>
             </div>
           )}
           {integration.mrr !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                MRR Tracked
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">MRR Tracked</p>
+              <p className="text-lg font-bold text-foreground">
                 €{integration.mrr.toLocaleString()}
               </p>
             </div>
           )}
           {integration.serversConnected !== undefined && (
-            <div
-              className="p-3 rounded-lg"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-            >
-              <p
-                className="text-xs"
-                style={{ color: "var(--foreground-subtle)" }}
-              >
-                Servers
-              </p>
-              <p
-                className="text-lg font-bold"
-                style={{ color: "var(--foreground)" }}
-              >
+            <div className="p-3 rounded-lg bg-black/20">
+              <p className="text-xs text-foreground-subtle">Servers</p>
+              <p className="text-lg font-bold text-foreground">
                 {integration.serversConnected}
               </p>
             </div>
@@ -266,38 +168,17 @@ export function IntegrationTile({
       )}
 
       {/* Footer */}
-      <div
-        className="flex items-center justify-between pt-4"
-        style={{ borderTop: "1px solid var(--surface-border)" }}
-      >
-        <p className="text-xs" style={{ color: "var(--foreground-subtle)" }}>
+      <div className="flex items-center justify-between pt-4 border-t border-surface-border">
+        <p className="text-xs text-foreground-subtle">
           Last sync: {formatDate(integration.lastSync)}
         </p>
         <button
           onClick={() => onToggle?.(integration.id)}
-          className="px-4 py-2 rounded-lg text-sm font-medium transition-smooth"
-          style={{
-            backgroundColor:
-              integration.status === "connected"
-                ? "var(--surface)"
-                : "var(--info-bg)",
-            color:
-              integration.status === "connected"
-                ? "var(--foreground)"
-                : "var(--info)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor =
-              integration.status === "connected"
-                ? "var(--surface-hover)"
-                : "var(--info-bg-hover)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor =
-              integration.status === "connected"
-                ? "var(--surface)"
-                : "var(--info-bg)";
-          }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-smooth ${
+            integration.status === "connected"
+              ? "bg-surface text-foreground hover:bg-surface-hover"
+              : "bg-info-bg text-info hover:bg-info-bg-hover"
+          }`}
         >
           {integration.status === "connected" ? "Disconnect" : "Connect"}
         </button>

@@ -29,15 +29,11 @@ export default function SummariesPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div
-            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
-            style={{ backgroundColor: "var(--info-bg)" }}
-          >
+          <div className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow bg-info-bg">
             <svg
-              className="w-8 h-8 animate-spin"
+              className="w-8 h-8 animate-spin text-info"
               fill="none"
               viewBox="0 0 24 24"
-              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -54,9 +50,7 @@ export default function SummariesPage() {
               />
             </svg>
           </div>
-          <p style={{ color: "var(--foreground-muted)" }}>
-            Loading summaries...
-          </p>
+          <p className="text-foreground-muted">Loading summaries...</p>
         </div>
       </div>
     );
@@ -75,27 +69,11 @@ export default function SummariesPage() {
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className="px-4 py-2 rounded-lg text-sm font-medium transition-smooth"
-            style={{
-              backgroundColor:
-                filter === type ? "var(--info-bg)" : "var(--surface)",
-              color:
-                filter === type ? "var(--info)" : "var(--foreground-muted)",
-              border:
-                filter === type
-                  ? "1px solid var(--info-border)"
-                  : "1px solid transparent",
-            }}
-            onMouseEnter={(e) => {
-              if (filter !== type) {
-                e.currentTarget.style.backgroundColor = "var(--surface-hover)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (filter !== type) {
-                e.currentTarget.style.backgroundColor = "var(--surface)";
-              }
-            }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-smooth ${
+              filter === type
+                ? "bg-info-bg text-info border border-info-border"
+                : "bg-surface text-foreground-muted border border-transparent hover:bg-surface-hover"
+            }`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
@@ -111,7 +89,7 @@ export default function SummariesPage() {
 
       {summaries.length === 0 && (
         <div className="text-center py-12 glass-card">
-          <p style={{ color: "var(--foreground-muted)" }}>
+          <p className="text-foreground-muted">
             No summaries found for the selected filter.
           </p>
         </div>

@@ -24,39 +24,21 @@ export function KPICard({ kpi }: KPICardProps) {
   };
 
   return (
-    <div
-      className="glass-card p-6 transition-smooth group"
-      style={{
-        ["--hover-border" as string]: "var(--info-border)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "var(--info-border)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "var(--card-border)";
-      }}
-    >
+    <div className="glass-card p-6 transition-smooth group hover:border-info-border">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <p className="text-sm" style={{ color: "var(--foreground-muted)" }}>
-            {kpi.name}
-          </p>
-          <p
-            className="text-3xl font-bold mt-1"
-            style={{ color: "var(--foreground)" }}
-          >
+          <p className="text-sm text-foreground-muted">{kpi.name}</p>
+          <p className="text-3xl font-bold mt-1 text-foreground">
             {formatValue(kpi.value)}
           </p>
         </div>
         <div
-          className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1"
-          style={{
-            backgroundColor: isPositive
-              ? "var(--success-bg)"
-              : "var(--danger-bg)",
-            color: isPositive ? "var(--success)" : "var(--danger)",
-          }}
+          className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${
+            isPositive
+              ? "bg-success-bg text-success"
+              : "bg-danger-bg text-danger"
+          }`}
         >
           <svg
             className={`w-4 h-4 ${isPositive ? "" : "rotate-180"}`}
@@ -86,8 +68,8 @@ export function KPICard({ kpi }: KPICardProps) {
               background:
                 i === kpi.trend.length - 1
                   ? isPositive
-                    ? `linear-gradient(to top, var(--success-bg) 0%, var(--success) 100%)`
-                    : `linear-gradient(to top, var(--danger-bg) 0%, var(--danger) 100%)`
+                    ? `linear-gradient(to top, var(--color-success-bg) 0%, var(--color-success) 100%)`
+                    : `linear-gradient(to top, var(--color-danger-bg) 0%, var(--color-danger) 100%)`
                   : undefined,
             }}
           />
@@ -95,10 +77,7 @@ export function KPICard({ kpi }: KPICardProps) {
       </div>
 
       {/* Explanation */}
-      <p
-        className="text-xs line-clamp-2 transition-colors"
-        style={{ color: "var(--foreground-subtle)" }}
-      >
+      <p className="text-xs line-clamp-2 transition-colors text-foreground-subtle">
         {kpi.explanation}
       </p>
     </div>

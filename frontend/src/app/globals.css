@@ -4,23 +4,60 @@
   /* Base colors */
   --color-background: #0a0a0f;
   --color-foreground: #f0f0f5;
+  --color-foreground-muted: #a1a1aa;
+  --color-foreground-subtle: #71717a;
+  --color-foreground-faint: #52525b;
+
+  /* Card colors */
   --color-card-bg: rgba(20, 20, 30, 0.8);
   --color-card-border: rgba(255, 255, 255, 0.08);
+  --color-card-border-hover: rgba(255, 255, 255, 0.15);
 
   /* Primary (purple) */
   --color-primary: #8b5cf6;
+  --color-primary-hover: #a78bfa;
   --color-primary-glow: rgba(139, 92, 246, 0.4);
+  --color-primary-bg: rgba(139, 92, 246, 0.1);
+  --color-primary-bg-hover: rgba(139, 92, 246, 0.2);
+  --color-primary-border: rgba(139, 92, 246, 0.3);
 
-  /* Semantic colors */
+  /* Success (green) */
   --color-success: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+  --color-success-bg-hover: rgba(16, 185, 129, 0.2);
+  --color-success-border: rgba(16, 185, 129, 0.3);
+
+  /* Warning (amber) */
   --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-warning-bg-hover: rgba(245, 158, 11, 0.2);
+  --color-warning-border: rgba(245, 158, 11, 0.3);
+
+  /* Danger (red) */
   --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.1);
+  --color-danger-bg-hover: rgba(239, 68, 68, 0.2);
+  --color-danger-border: rgba(239, 68, 68, 0.3);
+
+  /* Info (blue) */
   --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.1);
+  --color-info-bg-hover: rgba(59, 130, 246, 0.2);
+  --color-info-border: rgba(59, 130, 246, 0.3);
+
+  /* Muted */
   --color-muted: #71717a;
+  --color-muted-bg: rgba(113, 113, 122, 0.1);
+  --color-muted-border: rgba(113, 113, 122, 0.3);
 
   /* Accent for gradients */
   --color-accent: #ec4899;
   --color-accent-secondary: #f97316;
+
+  /* Surface colors */
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface-hover: rgba(255, 255, 255, 0.1);
+  --color-surface-border: rgba(255, 255, 255, 0.05);
 }
 
 :root {
