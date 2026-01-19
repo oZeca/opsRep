@@ -5,40 +5,19 @@ const apiRoutes = require("./routes/api");
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
+// CORS - Allow all origins
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  }),
+);
 
-    // Allow localhost for development
-    if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
-      return callback(null, true);
-    }
+// Handle preflight requests
+app.options("*", cors());
 
-    // Allow Vercel deployments
-    if (origin.includes(".vercel.app") || origin.includes("vercel.app")) {
-      return callback(null, true);
-    }
-
-    // Allow custom domain if set in environment
-    if (process.env.ALLOWED_ORIGIN && origin === process.env.ALLOWED_ORIGIN) {
-      return callback(null, true);
-    }
-
-    // Default: allow all in development, restrict in production
-    if (process.env.NODE_ENV !== "production") {
-      return callback(null, true);
-    }
-
-    callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-};
-
-app.use(cors(corsOptions));
 app.use(express.json());
 
 // API Routes
