@@ -57,6 +57,16 @@ const mockIntegrations = [
     lastSync: null,
     icon: "zendesk",
   },
+  {
+    id: "int_discord",
+    name: "Discord",
+    type: "communication",
+    status: "disconnected",
+    lastSync: null,
+    serversConnected: 0,
+    messagesIndexed: 0,
+    icon: "discord",
+  },
 ];
 
 const mockSummaries = [

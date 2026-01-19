@@ -42,6 +42,7 @@ export interface Integration {
   databasesConnected?: number;
   transactionsTracked?: number;
   mrr?: number;
+  serversConnected?: number;
 }
 
 export interface SummaryHighlight {
