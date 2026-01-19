@@ -42,11 +42,15 @@ export default function KPIsPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4 animate-pulse-glow">
+          <div
+            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
+            style={{ backgroundColor: "var(--info-bg)" }}
+          >
             <svg
-              className="w-8 h-8 text-blue-400 animate-spin"
+              className="w-8 h-8 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
+              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -63,7 +67,7 @@ export default function KPIsPage() {
               />
             </svg>
           </div>
-          <p className="text-zinc-400">Loading KPIs...</p>
+          <p style={{ color: "var(--foreground-muted)" }}>Loading KPIs...</p>
         </div>
       </div>
     );
@@ -84,11 +88,27 @@ export default function KPIsPage() {
           <button
             key={cat}
             onClick={() => setCategory(cat)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-smooth ${
-              category === cat
-                ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                : "bg-white/5 text-zinc-400 hover:bg-white/10"
-            }`}
+            className="px-4 py-2 rounded-lg text-sm font-medium capitalize transition-smooth"
+            style={{
+              backgroundColor:
+                category === cat ? "var(--info-bg)" : "var(--surface)",
+              color:
+                category === cat ? "var(--info)" : "var(--foreground-muted)",
+              border:
+                category === cat
+                  ? "1px solid var(--info-border)"
+                  : "1px solid transparent",
+            }}
+            onMouseEnter={(e) => {
+              if (category !== cat) {
+                e.currentTarget.style.backgroundColor = "var(--surface-hover)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (category !== cat) {
+                e.currentTarget.style.backgroundColor = "var(--surface)";
+              }
+            }}
           >
             {cat}
           </button>
@@ -106,12 +126,16 @@ export default function KPIsPage() {
       {activeAnomalies.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-1.5 rounded-lg bg-amber-500/20">
+            <div
+              className="p-1.5 rounded-lg"
+              style={{ backgroundColor: "var(--warning-bg)" }}
+            >
               <svg
-                className="w-4 h-4 text-amber-400"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ color: "var(--warning)" }}
               >
                 <path
                   strokeLinecap="round"
@@ -121,7 +145,10 @@ export default function KPIsPage() {
                 />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2
+              className="text-lg font-semibold"
+              style={{ color: "var(--foreground)" }}
+            >
               Detected Anomalies
             </h2>
           </div>

@@ -34,11 +34,15 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4 animate-pulse-glow">
+          <div
+            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
+            style={{ backgroundColor: "var(--info-bg)" }}
+          >
             <svg
-              className="w-8 h-8 text-blue-400 animate-spin"
+              className="w-8 h-8 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
+              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -55,7 +59,9 @@ export default function DashboardPage() {
               />
             </svg>
           </div>
-          <p className="text-zinc-400">Loading dashboard...</p>
+          <p style={{ color: "var(--foreground-muted)" }}>
+            Loading dashboard...
+          </p>
         </div>
       </div>
     );
@@ -73,12 +79,16 @@ export default function DashboardPage() {
       {activeAnomalies.length > 0 && (
         <section className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-1.5 rounded-lg bg-red-500/20">
+            <div
+              className="p-1.5 rounded-lg"
+              style={{ backgroundColor: "var(--danger-bg)" }}
+            >
               <svg
-                className="w-4 h-4 text-red-400"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ color: "var(--danger)" }}
               >
                 <path
                   strokeLinecap="round"
@@ -88,8 +98,19 @@ export default function DashboardPage() {
                 />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-white">Active Alerts</h2>
-            <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">
+            <h2
+              className="text-lg font-semibold"
+              style={{ color: "var(--foreground)" }}
+            >
+              Active Alerts
+            </h2>
+            <span
+              className="px-2 py-0.5 rounded-full text-xs font-medium"
+              style={{
+                backgroundColor: "var(--danger-bg)",
+                color: "var(--danger)",
+              }}
+            >
               {activeAnomalies.length}
             </span>
           </div>
@@ -104,10 +125,22 @@ export default function DashboardPage() {
       {/* KPIs */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Key Metrics</h2>
+          <h2
+            className="text-lg font-semibold"
+            style={{ color: "var(--foreground)" }}
+          >
+            Key Metrics
+          </h2>
           <a
             href="/kpis"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm transition-colors"
+            style={{ color: "var(--info)" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--primary)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--info)";
+            }}
           >
             View all →
           </a>
@@ -123,10 +156,22 @@ export default function DashboardPage() {
       {latestSummary && (
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">Latest Summary</h2>
+            <h2
+              className="text-lg font-semibold"
+              style={{ color: "var(--foreground)" }}
+            >
+              Latest Summary
+            </h2>
             <a
               href="/summaries"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm transition-colors"
+              style={{ color: "var(--info)" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--primary)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--info)";
+              }}
             >
               View all →
             </a>

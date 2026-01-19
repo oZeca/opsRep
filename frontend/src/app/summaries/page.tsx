@@ -29,11 +29,15 @@ export default function SummariesPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4 animate-pulse-glow">
+          <div
+            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
+            style={{ backgroundColor: "var(--info-bg)" }}
+          >
             <svg
-              className="w-8 h-8 text-blue-400 animate-spin"
+              className="w-8 h-8 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
+              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -50,7 +54,9 @@ export default function SummariesPage() {
               />
             </svg>
           </div>
-          <p className="text-zinc-400">Loading summaries...</p>
+          <p style={{ color: "var(--foreground-muted)" }}>
+            Loading summaries...
+          </p>
         </div>
       </div>
     );
@@ -69,11 +75,27 @@ export default function SummariesPage() {
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-smooth ${
-              filter === type
-                ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                : "bg-white/5 text-zinc-400 hover:bg-white/10"
-            }`}
+            className="px-4 py-2 rounded-lg text-sm font-medium transition-smooth"
+            style={{
+              backgroundColor:
+                filter === type ? "var(--info-bg)" : "var(--surface)",
+              color:
+                filter === type ? "var(--info)" : "var(--foreground-muted)",
+              border:
+                filter === type
+                  ? "1px solid var(--info-border)"
+                  : "1px solid transparent",
+            }}
+            onMouseEnter={(e) => {
+              if (filter !== type) {
+                e.currentTarget.style.backgroundColor = "var(--surface-hover)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (filter !== type) {
+                e.currentTarget.style.backgroundColor = "var(--surface)";
+              }
+            }}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
@@ -89,7 +111,7 @@ export default function SummariesPage() {
 
       {summaries.length === 0 && (
         <div className="text-center py-12 glass-card">
-          <p className="text-zinc-400">
+          <p style={{ color: "var(--foreground-muted)" }}>
             No summaries found for the selected filter.
           </p>
         </div>

@@ -38,12 +38,16 @@ export function ChatInterface({
       <div className="flex-1 overflow-y-auto space-y-4 mb-4">
         {history.length === 0 ? (
           <div className="text-center py-12">
-            <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4">
+            <div
+              className="inline-flex p-4 rounded-2xl mb-4"
+              style={{ backgroundColor: "var(--info-bg)" }}
+            >
               <svg
-                className="w-8 h-8 text-blue-400"
+                className="w-8 h-8"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ color: "var(--info)" }}
               >
                 <path
                   strokeLinecap="round"
@@ -53,10 +57,16 @@ export function ChatInterface({
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3
+              className="text-lg font-semibold mb-2"
+              style={{ color: "var(--foreground)" }}
+            >
               Ask anything about your business
             </h3>
-            <p className="text-zinc-400 text-sm mb-6 max-w-md mx-auto">
+            <p
+              className="text-sm mb-6 max-w-md mx-auto"
+              style={{ color: "var(--foreground-muted)" }}
+            >
               I have access to your Slack conversations, Notion documents, and
               Stripe data. Ask me about decisions, customers, metrics, or
               anything else.
@@ -68,7 +78,21 @@ export function ChatInterface({
                 <button
                   key={i}
                   onClick={() => setQuestion(q)}
-                  className="text-left px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-zinc-300 hover:bg-white/10 hover:border-blue-500/30 transition-smooth"
+                  className="text-left px-4 py-3 rounded-xl text-sm transition-smooth"
+                  style={{
+                    backgroundColor: "var(--surface)",
+                    border: "1px solid var(--card-border)",
+                    color: "var(--foreground)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "var(--surface-hover)";
+                    e.currentTarget.style.borderColor = "var(--info-border)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--surface)";
+                    e.currentTarget.style.borderColor = "var(--card-border)";
+                  }}
                 >
                   {q}
                 </button>
@@ -80,8 +104,16 @@ export function ChatInterface({
             <div key={qa.id} className="space-y-4">
               {/* Question */}
               <div className="flex justify-end">
-                <div className="max-w-[80%] p-4 rounded-2xl rounded-tr-sm bg-blue-500/20 border border-blue-500/30">
-                  <p className="text-sm text-white">{qa.question}</p>
+                <div
+                  className="max-w-[80%] p-4 rounded-2xl rounded-tr-sm"
+                  style={{
+                    backgroundColor: "var(--info-bg)",
+                    border: "1px solid var(--info-border)",
+                  }}
+                >
+                  <p className="text-sm" style={{ color: "var(--foreground)" }}>
+                    {qa.question}
+                  </p>
                 </div>
               </div>
 
@@ -89,12 +121,16 @@ export function ChatInterface({
               <div className="flex justify-start">
                 <div className="max-w-[85%] glass-card p-5">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="p-1.5 rounded-lg bg-blue-500/20">
+                    <div
+                      className="p-1.5 rounded-lg"
+                      style={{ backgroundColor: "var(--info-bg)" }}
+                    >
                       <svg
-                        className="w-4 h-4 text-blue-400"
+                        className="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        style={{ color: "var(--info)" }}
                       >
                         <path
                           strokeLinecap="round"
@@ -104,28 +140,54 @@ export function ChatInterface({
                         />
                       </svg>
                     </div>
-                    <span className="text-xs font-medium text-blue-400">
+                    <span
+                      className="text-xs font-medium"
+                      style={{ color: "var(--info)" }}
+                    >
                       AI Assistant
                     </span>
-                    <span className="text-xs text-zinc-500">•</span>
-                    <span className="text-xs text-zinc-500">
+                    <span
+                      className="text-xs"
+                      style={{ color: "var(--foreground-subtle)" }}
+                    >
+                      •
+                    </span>
+                    <span
+                      className="text-xs"
+                      style={{ color: "var(--foreground-subtle)" }}
+                    >
                       {Math.round(qa.confidence * 100)}% confident
                     </span>
                   </div>
 
                   <div className="prose prose-invert prose-sm max-w-none">
-                    <div className="text-sm text-zinc-300 whitespace-pre-wrap">
+                    <div
+                      className="text-sm whitespace-pre-wrap"
+                      style={{ color: "var(--foreground)" }}
+                    >
                       {qa.answer}
                     </div>
                   </div>
 
                   {/* Sources */}
-                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
-                    <span className="text-xs text-zinc-500">Sources:</span>
+                  <div
+                    className="flex flex-wrap gap-2 mt-4 pt-4"
+                    style={{ borderTop: "1px solid var(--surface-border)" }}
+                  >
+                    <span
+                      className="text-xs"
+                      style={{ color: "var(--foreground-subtle)" }}
+                    >
+                      Sources:
+                    </span>
                     {qa.sources.map((source, i) => (
                       <span
                         key={i}
-                        className="px-2 py-1 rounded-md bg-white/5 text-xs text-zinc-400"
+                        className="px-2 py-1 rounded-md text-xs"
+                        style={{
+                          backgroundColor: "var(--surface)",
+                          color: "var(--foreground-muted)",
+                        }}
                       >
                         {source}
                       </span>
@@ -142,11 +204,15 @@ export function ChatInterface({
           <div className="flex justify-start">
             <div className="glass-card p-5">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/20">
+                <div
+                  className="p-2 rounded-lg"
+                  style={{ backgroundColor: "var(--info-bg)" }}
+                >
                   <svg
-                    className="w-4 h-4 text-blue-400 animate-spin"
+                    className="w-4 h-4 animate-spin"
                     fill="none"
                     viewBox="0 0 24 24"
+                    style={{ color: "var(--info)" }}
                   >
                     <circle
                       className="opacity-25"
@@ -163,7 +229,10 @@ export function ChatInterface({
                     />
                   </svg>
                 </div>
-                <span className="text-sm text-zinc-400">
+                <span
+                  className="text-sm"
+                  style={{ color: "var(--foreground-muted)" }}
+                >
                   Analyzing your data...
                 </span>
               </div>
@@ -179,13 +248,36 @@ export function ChatInterface({
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask anything about your business..."
-          className="w-full px-5 py-4 pr-14 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-smooth"
+          className="w-full px-5 py-4 pr-14 rounded-2xl transition-smooth focus:outline-none"
+          style={{
+            backgroundColor: "var(--surface)",
+            border: "1px solid var(--card-border)",
+            color: "var(--foreground)",
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = "var(--info-border)";
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = "var(--card-border)";
+          }}
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={!question.trim() || isLoading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-xl bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-xl transition-smooth disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            backgroundColor: "var(--info)",
+            color: "var(--foreground)",
+          }}
+          onMouseEnter={(e) => {
+            if (!e.currentTarget.disabled) {
+              e.currentTarget.style.backgroundColor = "var(--primary)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--info)";
+          }}
         >
           <svg
             className="w-5 h-5"

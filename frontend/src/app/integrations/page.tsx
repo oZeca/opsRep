@@ -56,11 +56,15 @@ export default function IntegrationsPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4 animate-pulse-glow">
+          <div
+            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
+            style={{ backgroundColor: "var(--info-bg)" }}
+          >
             <svg
-              className="w-8 h-8 text-blue-400 animate-spin"
+              className="w-8 h-8 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
+              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -77,7 +81,9 @@ export default function IntegrationsPage() {
               />
             </svg>
           </div>
-          <p className="text-zinc-400">Loading integrations...</p>
+          <p style={{ color: "var(--foreground-muted)" }}>
+            Loading integrations...
+          </p>
         </div>
       </div>
     );
@@ -96,12 +102,16 @@ export default function IntegrationsPage() {
       {/* Connected Integrations */}
       <section className="mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 rounded-lg bg-emerald-500/20">
+          <div
+            className="p-1.5 rounded-lg"
+            style={{ backgroundColor: "var(--success-bg)" }}
+          >
             <svg
-              className="w-4 h-4 text-emerald-400"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              style={{ color: "var(--success)" }}
             >
               <path
                 strokeLinecap="round"
@@ -111,8 +121,19 @@ export default function IntegrationsPage() {
               />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-white">Connected</h2>
-          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium">
+          <h2
+            className="text-lg font-semibold"
+            style={{ color: "var(--foreground)" }}
+          >
+            Connected
+          </h2>
+          <span
+            className="px-2 py-0.5 rounded-full text-xs font-medium"
+            style={{
+              backgroundColor: "var(--success-bg)",
+              color: "var(--success)",
+            }}
+          >
             {connected.length}
           </span>
         </div>
@@ -131,12 +152,16 @@ export default function IntegrationsPage() {
       {available.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-1.5 rounded-lg bg-zinc-500/20">
+            <div
+              className="p-1.5 rounded-lg"
+              style={{ backgroundColor: "var(--muted-bg)" }}
+            >
               <svg
-                className="w-4 h-4 text-zinc-400"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ color: "var(--muted)" }}
               >
                 <path
                   strokeLinecap="round"
@@ -146,7 +171,12 @@ export default function IntegrationsPage() {
                 />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-white">Available</h2>
+            <h2
+              className="text-lg font-semibold"
+              style={{ color: "var(--foreground)" }}
+            >
+              Available
+            </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {available.map((integration) => (

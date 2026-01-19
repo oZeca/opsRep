@@ -39,11 +39,15 @@ export default function AskPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="inline-flex p-4 rounded-2xl bg-blue-500/10 mb-4 animate-pulse-glow">
+          <div
+            className="inline-flex p-4 rounded-2xl mb-4 animate-pulse-glow"
+            style={{ backgroundColor: "var(--info-bg)" }}
+          >
             <svg
-              className="w-8 h-8 text-blue-400 animate-spin"
+              className="w-8 h-8 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
+              style={{ color: "var(--info)" }}
             >
               <circle
                 className="opacity-25"
@@ -60,7 +64,9 @@ export default function AskPage() {
               />
             </svg>
           </div>
-          <p className="text-zinc-400">Loading AI assistant...</p>
+          <p style={{ color: "var(--foreground-muted)" }}>
+            Loading AI assistant...
+          </p>
         </div>
       </div>
     );

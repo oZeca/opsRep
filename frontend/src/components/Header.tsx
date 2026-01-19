@@ -17,20 +17,37 @@ export function Header({ title, subtitle }: HeaderProps) {
   return (
     <header className="flex items-center justify-between mb-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">{title}</h1>
-        {subtitle && <p className="text-zinc-400 mt-1">{subtitle}</p>}
+        <h1
+          className="text-2xl font-bold"
+          style={{ color: "var(--foreground)" }}
+        >
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="mt-1" style={{ color: "var(--foreground-muted)" }}>
+            {subtitle}
+          </p>
+        )}
       </div>
       <div className="flex items-center gap-4">
         <div className="text-right">
-          <p className="text-sm text-zinc-300">{formattedDate}</p>
-          <p className="text-xs text-zinc-500">
+          <p className="text-sm" style={{ color: "var(--foreground)" }}>
+            {formattedDate}
+          </p>
+          <p className="text-xs" style={{ color: "var(--foreground-subtle)" }}>
             {now.toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
             })}
           </p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm"
+          style={{
+            background: `linear-gradient(135deg, var(--info) 0%, var(--accent) 100%)`,
+            color: "var(--foreground)",
+          }}
+        >
           SC
         </div>
       </div>

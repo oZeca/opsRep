@@ -1,31 +1,86 @@
 @import "tailwindcss";
 
 @theme {
+  /* Base colors */
   --color-background: #0a0a0f;
   --color-foreground: #f0f0f5;
   --color-card-bg: rgba(20, 20, 30, 0.8);
   --color-card-border: rgba(255, 255, 255, 0.08);
+
+  /* Primary (purple) */
   --color-primary: #8b5cf6;
   --color-primary-glow: rgba(139, 92, 246, 0.4);
+
+  /* Semantic colors */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-info: #3b82f6;
   --color-muted: #71717a;
+
+  /* Accent for gradients */
+  --color-accent: #ec4899;
+  --color-accent-secondary: #f97316;
 }
 
 :root {
+  /* Base colors */
   --background: #0a0a0f;
   --foreground: #f0f0f5;
+  --foreground-muted: #a1a1aa;
+  --foreground-subtle: #71717a;
+  --foreground-faint: #52525b;
+
+  /* Card colors */
   --card-bg: rgba(20, 20, 30, 0.8);
   --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Primary (purple) */
   --primary: #8b5cf6;
+  --primary-hover: #a78bfa;
   --primary-glow: rgba(139, 92, 246, 0.4);
+  --primary-bg: rgba(139, 92, 246, 0.1);
+  --primary-bg-hover: rgba(139, 92, 246, 0.2);
+  --primary-border: rgba(139, 92, 246, 0.3);
+
+  /* Success (green) */
   --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --success-bg-hover: rgba(16, 185, 129, 0.2);
+  --success-border: rgba(16, 185, 129, 0.3);
+
+  /* Warning (amber) */
   --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --warning-bg-hover: rgba(245, 158, 11, 0.2);
+  --warning-border: rgba(245, 158, 11, 0.3);
+
+  /* Danger (red) */
   --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --danger-bg-hover: rgba(239, 68, 68, 0.2);
+  --danger-border: rgba(239, 68, 68, 0.3);
+
+  /* Info (blue) */
   --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --info-bg-hover: rgba(59, 130, 246, 0.2);
+  --info-border: rgba(59, 130, 246, 0.3);
+
+  /* Muted */
   --muted: #71717a;
+  --muted-bg: rgba(113, 113, 122, 0.1);
+  --muted-border: rgba(113, 113, 122, 0.3);
+
+  /* Accent for gradients */
+  --accent: #ec4899;
+  --accent-secondary: #f97316;
+
+  /* Surface colors */
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.1);
+  --surface-border: rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -53,7 +108,12 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f97316 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--accent) 50%,
+    var(--accent-secondary) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,17 +136,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--surface-hover);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--card-border-hover);
 }
 
 /* Background pattern */
@@ -94,7 +154,7 @@ body {
   background-image:
     radial-gradient(
       ellipse 80% 50% at 50% -20%,
-      rgba(139, 92, 246, 0.15),
+      var(--primary-bg),
       transparent
     ),
     radial-gradient(
@@ -132,7 +192,7 @@ body {
   background: linear-gradient(
     180deg,
     var(--primary) 0%,
-    rgba(139, 92, 246, 0.3) 100%
+    var(--primary-border) 100%
   );
   border-radius: 2px 2px 0 0;
   transition: height 0.3s ease;

@@ -94,11 +94,22 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 glass-card border-r border-white/5 flex flex-col z-50">
+    <aside
+      className="fixed left-0 top-0 h-screen w-64 glass-card flex flex-col z-50"
+      style={{ borderRight: "1px solid var(--surface-border)" }}
+    >
       {/* Logo */}
-      <div className="p-6 border-b border-white/5">
+      <div
+        className="p-6"
+        style={{ borderBottom: "1px solid var(--surface-border)" }}
+      >
         <h1 className="text-xl font-bold gradient-text">OpsRep</h1>
-        <p className="text-xs text-zinc-500 mt-1">Automated Business Reports</p>
+        <p
+          className="text-xs mt-1"
+          style={{ color: "var(--foreground-subtle)" }}
+        >
+          Automated Business Reports
+        </p>
       </div>
 
       {/* Navigation */}
@@ -109,11 +120,27 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth ${
-                isActive
-                  ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                  : "text-zinc-400 hover:text-zinc-200 hover:bg-white/5"
-              }`}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth"
+              style={{
+                backgroundColor: isActive ? "var(--info-bg)" : "transparent",
+                color: isActive ? "var(--info)" : "var(--foreground-muted)",
+                border: isActive
+                  ? "1px solid var(--info-border)"
+                  : "1px solid transparent",
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor =
+                    "var(--surface-hover)";
+                  e.currentTarget.style.color = "var(--foreground)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "var(--foreground-muted)";
+                }
+              }}
             >
               {icons[item.icon]}
               <span className="font-medium">{item.label}</span>
@@ -123,14 +150,32 @@ export function Sidebar() {
       </nav>
 
       {/* Status */}
-      <div className="p-4 border-t border-white/5">
+      <div
+        className="p-4"
+        style={{ borderTop: "1px solid var(--surface-border)" }}
+      >
         <div className="glass-card p-4 rounded-xl">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs text-zinc-400">System Status</span>
+            <div
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ backgroundColor: "var(--success)" }}
+            />
+            <span
+              className="text-xs"
+              style={{ color: "var(--foreground-muted)" }}
+            >
+              System Status
+            </span>
           </div>
-          <p className="text-sm text-zinc-300">All integrations synced</p>
-          <p className="text-xs text-zinc-500 mt-1">Last sync: 2 min ago</p>
+          <p className="text-sm" style={{ color: "var(--foreground)" }}>
+            All integrations synced
+          </p>
+          <p
+            className="text-xs mt-1"
+            style={{ color: "var(--foreground-subtle)" }}
+          >
+            Last sync: 2 min ago
+          </p>
         </div>
       </div>
     </aside>

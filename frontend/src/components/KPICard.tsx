@@ -24,21 +24,39 @@ export function KPICard({ kpi }: KPICardProps) {
   };
 
   return (
-    <div className="glass-card p-6 transition-smooth hover:border-blue-500/30 group">
+    <div
+      className="glass-card p-6 transition-smooth group"
+      style={{
+        ["--hover-border" as string]: "var(--info-border)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "var(--info-border)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "var(--card-border)";
+      }}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <p className="text-sm text-zinc-400">{kpi.name}</p>
-          <p className="text-3xl font-bold text-white mt-1">
+          <p className="text-sm" style={{ color: "var(--foreground-muted)" }}>
+            {kpi.name}
+          </p>
+          <p
+            className="text-3xl font-bold mt-1"
+            style={{ color: "var(--foreground)" }}
+          >
             {formatValue(kpi.value)}
           </p>
         </div>
         <div
-          className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${
-            isPositive
-              ? "bg-emerald-500/20 text-emerald-400"
-              : "bg-red-500/20 text-red-400"
-          }`}
+          className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1"
+          style={{
+            backgroundColor: isPositive
+              ? "var(--success-bg)"
+              : "var(--danger-bg)",
+            color: isPositive ? "var(--success)" : "var(--danger)",
+          }}
         >
           <svg
             className={`w-4 h-4 ${isPositive ? "" : "rotate-180"}`}
@@ -62,20 +80,25 @@ export function KPICard({ kpi }: KPICardProps) {
         {kpi.trend.map((value, i) => (
           <div
             key={i}
-            className={`sparkline-bar ${
-              i === kpi.trend.length - 1
-                ? isPositive
-                  ? "bg-gradient-to-t from-emerald-500/30 to-emerald-400"
-                  : "bg-gradient-to-t from-red-500/30 to-red-400"
-                : ""
-            }`}
-            style={{ height: `${(value / maxTrend) * 100}%` }}
+            className="sparkline-bar"
+            style={{
+              height: `${(value / maxTrend) * 100}%`,
+              background:
+                i === kpi.trend.length - 1
+                  ? isPositive
+                    ? `linear-gradient(to top, var(--success-bg) 0%, var(--success) 100%)`
+                    : `linear-gradient(to top, var(--danger-bg) 0%, var(--danger) 100%)`
+                  : undefined,
+            }}
           />
         ))}
       </div>
 
       {/* Explanation */}
-      <p className="text-xs text-zinc-500 line-clamp-2 group-hover:text-zinc-400 transition-colors">
+      <p
+        className="text-xs line-clamp-2 transition-colors"
+        style={{ color: "var(--foreground-subtle)" }}
+      >
         {kpi.explanation}
       </p>
     </div>
