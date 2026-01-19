@@ -26,7 +26,7 @@ export function KPICard({ kpi }: KPICardProps) {
   return (
     <div className="glass-card p-6 transition-smooth group hover:border-info-border">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex flex-col xl:flex-row gap-2 items-start justify-between mb-4 ">
         <div>
           <p className="text-sm text-foreground-muted">{kpi.name}</p>
           <p className="text-3xl font-bold mt-1 text-foreground">
