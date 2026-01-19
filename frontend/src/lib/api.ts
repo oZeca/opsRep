@@ -1,0 +1,141 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+
+async function fetchAPI<T>(
+  endpoint: string,
+  options?: RequestInit,
+): Promise<T> {
+  const res = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.status} ${res.statusText}`);
+  }
+
+  return res.json();
+}
+
+// Types
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  avatar: string | null;
+}
+
+export interface Integration {
+  id: string;
+  name: string;
+  type: string;
+  status: "connected" | "disconnected" | "pending";
+  lastSync: string | null;
+  icon: string;
+  channelsConnected?: number;
+  messagesIndexed?: number;
+  pagesIndexed?: number;
+  databasesConnected?: number;
+  transactionsTracked?: number;
+  mrr?: number;
+}
+
+export interface SummaryHighlight {
+  type: "success" | "warning" | "info";
+  title: string;
+  content: string;
+}
+
+export interface SummarySection {
+  title: string;
+  items: string[];
+}
+
+export interface Summary {
+  id: string;
+  type: "weekly" | "monthly";
+  period: string;
+  dateRange: string;
+  createdAt: string;
+  status: string;
+  deliveredVia: string;
+  highlights: SummaryHighlight[];
+  sections: SummarySection[];
+  aiInsight: string;
+}
+
+export interface KPI {
+  id: string;
+  name: string;
+  shortName: string;
+  category: string;
+  value: number;
+  previousValue: number;
+  unit: string;
+  format: string;
+  change: number;
+  changeType: "positive" | "negative";
+  trend: number[];
+  explanation: string;
+}
+
+export interface Anomaly {
+  id: string;
+  severity: "high" | "medium" | "low";
+  title: string;
+  description: string;
+  metric: string;
+  currentValue?: number;
+  expectedRange?: number[];
+  detectedAt: string;
+  possibleCauses: string[];
+  recommendedActions: string[];
+  status: "investigating" | "acknowledged" | "resolved";
+  resolvedAt?: string;
+  resolution?: string;
+}
+
+export interface QAResponse {
+  id: string;
+  question: string;
+  answer: string;
+  sources: string[];
+  askedAt: string;
+  confidence: number;
+}
+
+// API Functions
+export const api = {
+  getUser: () => fetchAPI<User>("/user"),
+
+  getIntegrations: () => fetchAPI<Integration[]>("/integrations"),
+
+  updateIntegration: (id: string, updates: Partial<Integration>) =>
+    fetchAPI<Integration>(`/integrations/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updates),
+    }),
+
+  getSummaries: (type?: string) =>
+    fetchAPI<Summary[]>(`/summaries${type ? `?type=${type}` : ""}`),
+
+  getSummary: (id: string) => fetchAPI<Summary>(`/summaries/${id}`),
+
+  getKPIs: (category?: string) =>
+    fetchAPI<KPI[]>(`/kpis${category ? `?category=${category}` : ""}`),
+
+  getAnomalies: (status?: string) =>
+    fetchAPI<Anomaly[]>(`/anomalies${status ? `?status=${status}` : ""}`),
+
+  askQuestion: (question: string) =>
+    fetchAPI<QAResponse>("/questions", {
+      method: "POST",
+      body: JSON.stringify({ question }),
+    }),
+
+  getQAHistory: () => fetchAPI<QAResponse[]>("/questions"),
+};
