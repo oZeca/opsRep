@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 </h2>
                 <Badge variant="danger">{activeAnomalies.length}</Badge>
               </div>
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 ">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {activeAnomalies.slice(0, 2).map((anomaly) => (
                   <AnomalyAlert key={anomaly.id} anomaly={anomaly} compact />
                 ))}
