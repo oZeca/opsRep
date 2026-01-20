@@ -160,4 +160,88 @@ router.get("/changelog/weekly", async (req, res) => {
   }
 });
 
+// ===== DELIVERY ROUTES =====
+const deliveryService = require("../services/deliveryService");
+
+// Send weekly exec brief email
+router.post("/delivery/weekly-brief", async (req, res) => {
+  try {
+    const { recipients } = req.body;
+
+    // Gather all data for the brief
+    const [summary, kpis, anomalies, decisions] = await Promise.all([
+      dataService.getSummaries().then((s) => s[0]),
+      dataService.getKPIs(),
+      dataService.getAnomalies(),
+      dataService.getDecisions(),
+    ]);
+
+    const result = await deliveryService.sendWeeklyBrief(
+      { summary, kpis, anomalies, decisions },
+      recipients || ["exec@example.com"],
+    );
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Preview weekly brief (returns HTML)
+router.get("/delivery/weekly-brief/preview", async (req, res) => {
+  try {
+    const [summary, kpis, anomalies, decisions] = await Promise.all([
+      dataService.getSummaries().then((s) => s[0]),
+      dataService.getKPIs(),
+      dataService.getAnomalies(),
+      dataService.getDecisions(),
+    ]);
+
+    const { html } = deliveryService.generateWeeklyBriefEmail({
+      summary,
+      kpis,
+      anomalies,
+      decisions,
+    });
+
+    res.send(html);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Send critical alert to Slack
+router.post("/delivery/slack-alert", async (req, res) => {
+  try {
+    const { anomalyId, channel } = req.body;
+
+    const anomalies = await dataService.getAnomalies();
+    const anomaly = anomalies.find((a) => a.id === anomalyId);
+
+    if (!anomaly) {
+      return res.status(404).json({ error: "Anomaly not found" });
+    }
+
+    const result = await deliveryService.sendCriticalAlertToSlack(
+      anomaly,
+      channel || "#ops-alerts",
+    );
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get critical alerts (high severity + high confidence)
+router.get("/delivery/critical-alerts", async (req, res) => {
+  try {
+    const anomalies = await dataService.getAnomalies();
+    const critical = anomalies.filter(deliveryService.isCriticalAlert);
+    res.json(critical);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

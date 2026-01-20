@@ -199,7 +199,30 @@ export const api = {
 
   // Weekly Changelog
   getWeeklyChangelog: () => fetchAPI<WeeklyChangelog>("/changelog/weekly"),
+
+  // Delivery APIs
+  sendWeeklyBrief: (recipients: string[]) =>
+    fetchAPI<DeliveryResult>("/delivery/weekly-brief", {
+      method: "POST",
+      body: JSON.stringify({ recipients }),
+    }),
+
+  getCriticalAlerts: () => fetchAPI<Anomaly[]>("/delivery/critical-alerts"),
+
+  sendSlackAlert: (anomalyId: string, channel?: string) =>
+    fetchAPI<DeliveryResult>("/delivery/slack-alert", {
+      method: "POST",
+      body: JSON.stringify({ anomalyId, channel }),
+    }),
 };
+
+// Delivery types
+export interface DeliveryResult {
+  success: boolean;
+  sent?: number;
+  messageId?: string;
+  sentAt?: string;
+}
 
 // Weekly Changelog types
 export interface ChangelogEvent {

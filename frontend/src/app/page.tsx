@@ -93,7 +93,7 @@ export default function DashboardPage() {
         </section>
 
         <div className="grid gtid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 ">
-          <div>
+          <div className="flex flex-col gap-8">
             {/* KPIs */}
             <section>
               <div className="flex items-center justify-between mb-4">
