@@ -69,72 +69,73 @@ export default function DashboardPage() {
     <div className="max-w-7xl mx-auto">
       <Header title="Dashboard" subtitle="Your business at a glance" />
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Left column - Main content */}
-        <div className="lg:col-span-2 space-y-8">
+      <div className="flex flex-col gap-8">
+        <div className="grid gtid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 ">
           {/* Active Anomalies */}
-          {activeAnomalies.length > 0 && (
-            <section>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 rounded-lg bg-danger-bg">
-                  <AlertTriangle className="w-4 h-4 text-danger" />
+          <section>
+            {activeAnomalies.length > 0 && (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-1.5 rounded-lg bg-danger-bg">
+                    <AlertTriangle className="w-4 h-4 text-danger" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Active Alerts
+                  </h2>
+                  <Badge variant="danger">{activeAnomalies.length}</Badge>
                 </div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Active Alerts
-                </h2>
-                <Badge variant="danger">{activeAnomalies.length}</Badge>
-              </div>
-              <div className="space-y-4">
-                {activeAnomalies.slice(0, 2).map((anomaly) => (
-                  <AnomalyAlert key={anomaly.id} anomaly={anomaly} />
-                ))}
-              </div>
-            </section>
-          )}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 ">
+                  {activeAnomalies.slice(0, 2).map((anomaly) => (
+                    <AnomalyAlert key={anomaly.id} anomaly={anomaly} />
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
 
-          {/* KPIs */}
+          {/* Weekly Changelog */}
+          <section className="">
+            {changelog && <ChangelogTimeline changelog={changelog} />}
+          </section>
+        </div>
+
+        {/* KPIs */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-foreground">
+              Key Metrics
+            </h2>
+            <a
+              href="/kpis"
+              className="text-sm transition-colors text-info hover:text-primary"
+            >
+              View all →
+            </a>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {topKpis.map((kpi) => (
+              <KPICard key={kpi.id} kpi={kpi} />
+            ))}
+          </div>
+        </section>
+
+        {/* Latest Summary */}
+        {latestSummary && (
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-foreground">
-                Key Metrics
+                Latest Summary
               </h2>
               <a
-                href="/kpis"
+                href="/summaries"
                 className="text-sm transition-colors text-info hover:text-primary"
               >
                 View all →
               </a>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {topKpis.map((kpi) => (
-                <KPICard key={kpi.id} kpi={kpi} />
-              ))}
-            </div>
+            <SummaryCard summary={latestSummary} />
           </section>
-
-          {/* Latest Summary */}
-          {latestSummary && (
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-foreground">
-                  Latest Summary
-                </h2>
-                <a
-                  href="/summaries"
-                  className="text-sm transition-colors text-info hover:text-primary"
-                >
-                  View all →
-                </a>
-              </div>
-              <SummaryCard summary={latestSummary} />
-            </section>
-          )}
-        </div>
-
-        {/* Right column - Weekly Changelog */}
-        <div className="lg:col-span-1">
-          {changelog && <ChangelogTimeline changelog={changelog} />}
-        </div>
+        )}
       </div>
     </div>
   );

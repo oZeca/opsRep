@@ -82,7 +82,7 @@ export function AnomalyAlert({
       className={`glass-card p-5 transition-smooth border ${severity.bgClass} ${severity.borderClass}`}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-3 flex-col gap-2">
         <div className="flex items-center gap-3">
           <div
             className={`p-2 rounded-lg ${severity.bgClass} ${severity.colorClass}`}

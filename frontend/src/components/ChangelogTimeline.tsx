@@ -130,7 +130,7 @@ export function ChangelogTimeline({ changelog }: ChangelogTimelineProps) {
                 return (
                   <div
                     key={event.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg border ${config.bgClass} ${config.borderClass}/30`}
+                    className={`flex items-start gap-3 p-3 rounded-lg border ${config.bgClass} ${config.borderClass}`}
                   >
                     <div
                       className={`p-1.5 rounded-md ${config.bgClass} ${config.colorClass}`}
