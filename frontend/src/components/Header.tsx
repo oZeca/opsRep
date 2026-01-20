@@ -1,5 +1,7 @@
 "use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
 interface HeaderProps {
   title: string;
   subtitle?: string;
@@ -30,9 +32,9 @@ export function Header({ title, subtitle }: HeaderProps) {
             })}
           </p>
         </div>
-        <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm bg-gradient-to-br from-info to-accent text-foreground">
-          SC
-        </div>
+        <Avatar>
+          <AvatarFallback>SC</AvatarFallback>
+        </Avatar>
       </div>
     </header>
   );

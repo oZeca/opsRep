@@ -1,6 +1,8 @@
 "use client";
 
 import type { Anomaly } from "@/lib/api";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, CheckCircle } from "lucide-react";
 
 interface AnomalyAlertProps {
   anomaly: Anomaly;
@@ -8,16 +10,19 @@ interface AnomalyAlertProps {
 
 const severityConfig = {
   high: {
+    variant: "danger" as const,
     bgClass: "bg-danger-bg",
     borderClass: "border-danger-border",
     colorClass: "text-danger",
   },
   medium: {
+    variant: "warning" as const,
     bgClass: "bg-warning-bg",
     borderClass: "border-warning-border",
     colorClass: "text-warning",
   },
   low: {
+    variant: "info" as const,
     bgClass: "bg-info-bg",
     borderClass: "border-info-border",
     colorClass: "text-info",
@@ -26,16 +31,13 @@ const severityConfig = {
 
 const statusConfig = {
   investigating: {
-    bgClass: "bg-warning-bg",
-    colorClass: "text-warning",
+    variant: "warning" as const,
   },
   acknowledged: {
-    bgClass: "bg-info-bg",
-    colorClass: "text-info",
+    variant: "info" as const,
   },
   resolved: {
-    bgClass: "bg-success-bg",
-    colorClass: "text-success",
+    variant: "success" as const,
   },
 };
 
@@ -53,19 +55,7 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
           <div
             className={`p-2 rounded-lg ${severity.bgClass} ${severity.colorClass}`}
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
+            <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
             <p className="font-medium text-foreground">{anomaly.title}</p>
@@ -73,16 +63,10 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium uppercase ${severity.bgClass} ${severity.colorClass}`}
-          >
+          <Badge variant={severity.variant} className="uppercase">
             {anomaly.severity}
-          </span>
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${status.bgClass} ${status.colorClass}`}
-          >
-            {anomaly.status}
-          </span>
+          </Badge>
+          <Badge variant={status.variant}>{anomaly.status}</Badge>
         </div>
       </div>
 
@@ -151,7 +135,10 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
       {/* Resolution */}
       {anomaly.status === "resolved" && anomaly.resolution && (
         <div className="mt-4 p-3 rounded-lg bg-success-bg border border-success-border">
-          <p className="text-xs font-medium mb-1 text-success">Resolution</p>
+          <div className="flex items-center gap-2 mb-1">
+            <CheckCircle className="w-4 h-4 text-success" />
+            <p className="text-xs font-medium text-success">Resolution</p>
+          </div>
           <p className="text-xs text-foreground">{anomaly.resolution}</p>
         </div>
       )}

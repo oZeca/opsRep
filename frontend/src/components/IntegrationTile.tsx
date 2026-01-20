@@ -2,6 +2,9 @@
 
 import type { Integration } from "@/lib/api";
 import { JSX } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 interface IntegrationTileProps {
   integration: Integration;
@@ -43,20 +46,17 @@ const integrationIcons: Record<string, JSX.Element> = {
 
 const statusConfig = {
   connected: {
-    colorClass: "text-success",
-    bgClass: "bg-success-bg",
+    variant: "success" as const,
     label: "Connected",
     dotClass: "bg-success",
   },
   disconnected: {
-    colorClass: "text-muted",
-    bgClass: "bg-muted-bg",
+    variant: "muted" as const,
     label: "Disconnected",
     dotClass: "bg-muted",
   },
   pending: {
-    colorClass: "text-warning",
-    bgClass: "bg-warning-bg",
+    variant: "warning" as const,
     label: "Pending",
     dotClass: "bg-warning animate-pulse",
   },
@@ -84,7 +84,13 @@ export function IntegrationTile({
       <div className="flex flex-col xl:flex-row items-start justify-between mb-4 gap-2">
         <div className="flex items-center gap-4">
           <div
-            className={`p-3 rounded-xl transition-smooth group-hover:scale-110 ${status.bgClass} ${status.colorClass}`}
+            className={`p-3 rounded-xl transition-smooth group-hover:scale-110 ${
+              integration.status === "connected"
+                ? "bg-success-bg text-success"
+                : integration.status === "pending"
+                  ? "bg-warning-bg text-warning"
+                  : "bg-muted-bg text-muted"
+            }`}
           >
             {Icon}
           </div>
@@ -99,9 +105,7 @@ export function IntegrationTile({
         </div>
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${status.dotClass}`} />
-          <span className={`text-xs font-medium ${status.colorClass}`}>
-            {status.label}
-          </span>
+          <Badge variant={status.variant}>{status.label}</Badge>
         </div>
       </div>
 
@@ -168,20 +172,18 @@ export function IntegrationTile({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-surface-border">
+      <Separator className="my-4" />
+      <div className="flex items-center justify-between">
         <p className="text-xs text-foreground-subtle">
           Last sync: {formatDate(integration.lastSync)}
         </p>
-        <button
+        <Button
           onClick={() => onToggle?.(integration.id)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-smooth ${
-            integration.status === "connected"
-              ? "bg-surface text-foreground hover:bg-surface-hover"
-              : "bg-info-bg text-info hover:bg-info-bg-hover"
-          }`}
+          variant={integration.status === "connected" ? "secondary" : "info"}
+          size="sm"
         >
           {integration.status === "connected" ? "Disconnect" : "Connect"}
-        </button>
+        </Button>
       </div>
     </div>
   );
