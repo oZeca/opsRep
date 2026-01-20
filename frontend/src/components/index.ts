@@ -6,3 +6,4 @@ export { AnomalyAlert } from "./AnomalyAlert";
 export { IntegrationTile } from "./IntegrationTile";
 export { ChatInterface } from "./ChatInterface";
 export { SuggestedAction } from "./SuggestedAction";
+export { ImpactBadge } from "./ImpactBadge";

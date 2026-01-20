@@ -306,6 +306,12 @@ const mockAnomalies = [
       "Consider temporary support staff augmentation",
     ],
     status: "investigating",
+    impact: {
+      revenueAtRisk: [8000, 15000],
+      confidence: "high",
+      consequence:
+        "If ignored, this may lead to SLA breaches within 7–10 days and potential churn of 2-3 enterprise accounts.",
+    },
   },
   {
     id: "anom_002",
@@ -326,6 +332,12 @@ const mockAnomalies = [
       "Enable auto-responses for common questions",
     ],
     status: "acknowledged",
+    impact: {
+      revenueAtRisk: [3000, 6000],
+      confidence: "medium",
+      consequence:
+        "Continued delays may result in 2-3 customer escalations per day and negative NPS impact.",
+    },
   },
   {
     id: "anom_003",
@@ -347,6 +359,12 @@ const mockAnomalies = [
     resolvedAt: "2026-01-18T09:00:00Z",
     resolution:
       "Confirmed as legitimate traffic from new Singapore-based customer.",
+    impact: {
+      revenueAtRisk: [0, 2000],
+      confidence: "low",
+      consequence:
+        "If malicious, could result in account compromises. Actual risk was minimal.",
+    },
   },
 ];
 

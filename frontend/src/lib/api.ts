@@ -84,6 +84,12 @@ export interface KPI {
   explanation: string;
 }
 
+export interface AnomalyImpact {
+  revenueAtRisk: [number, number];
+  confidence: "low" | "medium" | "high";
+  consequence: string;
+}
+
 export interface Anomaly {
   id: string;
   severity: "high" | "medium" | "low";
@@ -98,6 +104,7 @@ export interface Anomaly {
   status: "investigating" | "acknowledged" | "resolved";
   resolvedAt?: string;
   resolution?: string;
+  impact?: AnomalyImpact;
 }
 
 export interface QAResponse {

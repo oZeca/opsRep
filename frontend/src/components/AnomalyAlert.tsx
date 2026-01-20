@@ -5,6 +5,7 @@ import type { Anomaly, Decision } from "@/lib/api";
 import { api } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { SuggestedAction } from "@/components/SuggestedAction";
+import { ImpactBadge } from "@/components/ImpactBadge";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 
 interface AnomalyAlertProps {
@@ -120,6 +121,13 @@ export function AnomalyAlert({
               {anomaly.expectedRange[0]} - {anomaly.expectedRange[1]}
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Impact Estimation */}
+      {anomaly.impact && (
+        <div className="mb-4">
+          <ImpactBadge impact={anomaly.impact} />
         </div>
       )}
 
