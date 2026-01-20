@@ -470,6 +470,85 @@ const mockDecisions = [
   },
 ];
 
+const mockWeeklyChangelog = {
+  period: "Week 3, 2026",
+  dateRange: "Jan 13 - Jan 19, 2026",
+  generatedAt: "2026-01-19T18:00:00Z",
+  events: [
+    {
+      id: "evt_001",
+      date: "2026-01-19",
+      type: "decision",
+      title: "Hired temporary support contractor",
+      description: "To maintain SLA compliance during ticket spike",
+      status: "done",
+      relatedId: "dec_003",
+    },
+    {
+      id: "evt_002",
+      date: "2026-01-18",
+      type: "anomaly",
+      title: "Support ticket spike detected",
+      description: "Tickets increased 34% above expected range",
+      status: "investigating",
+      relatedId: "anom_001",
+    },
+    {
+      id: "evt_003",
+      date: "2026-01-18",
+      type: "anomaly",
+      title: "Response time degradation",
+      description: "Average response time increased 50%",
+      status: "acknowledged",
+      relatedId: "anom_002",
+    },
+    {
+      id: "evt_004",
+      date: "2026-01-18",
+      type: "decision",
+      title: "Enabled auto-responses for common questions",
+      description: "To reduce support load by 25%",
+      status: "accepted",
+      relatedId: "dec_002",
+    },
+    {
+      id: "evt_005",
+      date: "2026-01-17",
+      type: "kpi",
+      title: "MRR growth reached 12%",
+      description: "Driven by 3 new Enterprise deals",
+      status: "positive",
+      relatedId: "kpi_mrr",
+    },
+    {
+      id: "evt_006",
+      date: "2026-01-16",
+      type: "release",
+      title: "API v2.3 deployed",
+      description: "New rate limiting and performance improvements",
+      status: "completed",
+    },
+    {
+      id: "evt_007",
+      date: "2026-01-15",
+      type: "decision",
+      title: "Postponed mobile app to Q2",
+      description: "Engineering bandwidth prioritized for API stability",
+      status: "done",
+    },
+    {
+      id: "evt_008",
+      date: "2026-01-14",
+      type: "customer",
+      title: "Closed deal with TechCorp GmbH",
+      description: "New Enterprise customer at €2,400/mo",
+      status: "positive",
+    },
+  ],
+  summary:
+    "This week saw strong MRR growth (+12%) offset by a support ticket spike (+34%) following the v2.3 release. Key decisions: paused feature rollout, hired temp support, enabled auto-responses. The response time issue is being actively addressed.",
+};
+
 module.exports = {
   mockUser,
   mockIntegrations,
@@ -478,4 +557,5 @@ module.exports = {
   mockAnomalies,
   mockQAHistory,
   mockDecisions,
+  mockWeeklyChangelog,
 };

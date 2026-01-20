@@ -203,6 +203,13 @@ const dataService = {
     }
     return realDataService.getDecisionsForAnomaly(anomalyId);
   },
+
+  async getWeeklyChangelog() {
+    if (config.useMockData) {
+      return mockData.mockWeeklyChangelog;
+    }
+    return realDataService.getWeeklyChangelog();
+  },
 };
 
 module.exports = dataService;

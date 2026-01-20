@@ -5,13 +5,44 @@ import type { QAResponse } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowRight, Sparkles, Loader2 } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Loader2,
+  Briefcase,
+  AlertCircle,
+  Lightbulb,
+} from "lucide-react";
 
 interface ChatInterfaceProps {
   history: QAResponse[];
   onAsk: (question: string) => Promise<void>;
   isLoading?: boolean;
 }
+
+const opinionModes = [
+  {
+    id: "ceo",
+    label: "Explain to CEO",
+    icon: Briefcase,
+    prompt:
+      "Give me a concise executive summary of this week's business performance that I can share with the CEO. Focus on key metrics, major wins, and critical issues. Keep it to 3-4 bullet points maximum.",
+  },
+  {
+    id: "worry",
+    label: "What should I worry about?",
+    icon: AlertCircle,
+    prompt:
+      "Based on all the data from this week, what are the 2-3 things I should be most worried about right now? Be specific about the risks and potential impact.",
+  },
+  {
+    id: "advice",
+    label: "What would you do?",
+    icon: Lightbulb,
+    prompt:
+      "If you were the VP of Operations, what would be your top 3 priorities this week based on the current data? Give me specific, actionable recommendations.",
+  },
+];
 
 export function ChatInterface({
   history,
@@ -29,6 +60,11 @@ export function ChatInterface({
     await onAsk(q);
   };
 
+  const handleOpinionMode = async (prompt: string) => {
+    if (isLoading) return;
+    await onAsk(prompt);
+  };
+
   const suggestedQuestions = [
     "What were the main customer complaints last week?",
     "How is the Q1 hiring plan progressing?",
@@ -38,6 +74,26 @@ export function ChatInterface({
 
   return (
     <div className="flex flex-col h-full">
+      {/* Opinion Mode Buttons */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {opinionModes.map((mode) => {
+          const Icon = mode.icon;
+          return (
+            <Button
+              key={mode.id}
+              variant="outline"
+              size="sm"
+              onClick={() => handleOpinionMode(mode.prompt)}
+              disabled={isLoading}
+              className="gap-1.5"
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {mode.label}
+            </Button>
+          );
+        })}
+      </div>
+
       {/* Chat History */}
       <ScrollArea className="flex-1 mb-4">
         <div className="space-y-4 pr-4">

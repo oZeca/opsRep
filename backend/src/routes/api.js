@@ -150,4 +150,14 @@ router.patch("/decisions/:id", async (req, res) => {
   }
 });
 
+// Get weekly changelog (what changed this week)
+router.get("/changelog/weekly", async (req, res) => {
+  try {
+    const changelog = await dataService.getWeeklyChangelog();
+    res.json(changelog);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

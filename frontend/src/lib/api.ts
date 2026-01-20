@@ -196,4 +196,26 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(updates),
     }),
+
+  // Weekly Changelog
+  getWeeklyChangelog: () => fetchAPI<WeeklyChangelog>("/changelog/weekly"),
 };
+
+// Weekly Changelog types
+export interface ChangelogEvent {
+  id: string;
+  date: string;
+  type: "decision" | "anomaly" | "kpi" | "release" | "customer";
+  title: string;
+  description: string;
+  status: string;
+  relatedId?: string;
+}
+
+export interface WeeklyChangelog {
+  period: string;
+  dateRange: string;
+  generatedAt: string;
+  events: ChangelogEvent[];
+  summary: string;
+}
