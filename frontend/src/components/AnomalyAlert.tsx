@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Anomaly, Decision } from "@/lib/api";
 import { api } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { SuggestedAction } from "@/components/SuggestedAction";
 import { ImpactBadge } from "@/components/ImpactBadge";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, ArrowRight } from "lucide-react";
 
 interface AnomalyAlertProps {
   anomaly: Anomaly;
   showSuggestedAction?: boolean;
+  compact?: boolean;
 }
 
 const severityConfig = {
@@ -49,6 +51,7 @@ const statusConfig = {
 export function AnomalyAlert({
   anomaly,
   showSuggestedAction = true,
+  compact = false,
 }: AnomalyAlertProps) {
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [loadingDecisions, setLoadingDecisions] = useState(false);
@@ -57,7 +60,7 @@ export function AnomalyAlert({
   const status = statusConfig[anomaly.status];
 
   useEffect(() => {
-    if (showSuggestedAction && anomaly.status !== "resolved") {
+    if (showSuggestedAction && !compact && anomaly.status !== "resolved") {
       setLoadingDecisions(true);
       api
         .getDecisionsForAnomaly(anomaly.id)
@@ -65,7 +68,7 @@ export function AnomalyAlert({
         .catch(console.error)
         .finally(() => setLoadingDecisions(false));
     }
-  }, [anomaly.id, anomaly.status, showSuggestedAction]);
+  }, [anomaly.id, anomaly.status, showSuggestedAction, compact]);
 
   const handleDecisionUpdate = (updated: Decision) => {
     setDecisions((prev) =>
@@ -77,6 +80,65 @@ export function AnomalyAlert({
   const suggestedDecision = decisions.find((d) => d.status === "suggested");
   const acceptedDecisions = decisions.filter((d) => d.status !== "suggested");
 
+  // Compact view for Dashboard
+  if (compact) {
+    return (
+      <div
+        className={`glass-card p-4 transition-smooth border ${severity.bgClass} ${severity.borderClass} hover:border-info-border`}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className={`p-2 rounded-lg ${severity.bgClass} ${severity.colorClass} shrink-0`}
+          >
+            <AlertTriangle className="w-4 h-4" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2 mb-1">
+              <p className="font-medium text-sm text-foreground truncate">
+                {anomaly.title}
+              </p>
+              <div className="flex items-center gap-1 shrink-0">
+                <Badge
+                  variant={severity.variant}
+                  className="uppercase text-[10px]"
+                >
+                  {anomaly.severity}
+                </Badge>
+                <Badge variant={status.variant} className="text-[10px]">
+                  {anomaly.status}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              {anomaly.impact ? (
+                <span className="text-xs text-foreground-muted">
+                  €{anomaly.impact.revenueAtRisk[0].toLocaleString()}–€
+                  {anomaly.impact.revenueAtRisk[1].toLocaleString()} at risk
+                  <span className="text-foreground-subtle">
+                    {" "}
+                    ({anomaly.impact.confidence})
+                  </span>
+                </span>
+              ) : (
+                <span className="text-xs text-foreground-muted">
+                  {anomaly.metric}
+                </span>
+              )}
+              <Link
+                href="/kpis"
+                className="text-xs text-info hover:text-primary flex items-center gap-1 shrink-0"
+              >
+                View details
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Full view for KPIs page
   return (
     <div
       className={`glass-card p-5 transition-smooth border ${severity.bgClass} ${severity.borderClass}`}
