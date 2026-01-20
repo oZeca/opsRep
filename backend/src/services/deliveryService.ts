@@ -1,12 +1,44 @@
 /**
  * Delivery Service - Handles email and Slack notifications
  */
-const config = require("../config");
+import config from "../config/index.js";
+import type {
+  Anomaly,
+  Summary,
+  KPI,
+  Decision,
+  DeliveryResult,
+  EmailPayload,
+  SlackMessagePayload,
+  SlackBlock,
+} from "../types/index.js";
+
+interface WeeklyBriefData {
+  summary?: Summary;
+  kpis: KPI[];
+  anomalies: Anomaly[];
+  decisions: Decision[];
+}
+
+interface GeneratedEmail {
+  html: string;
+  text: string;
+}
+
+interface SlackAlertMessage {
+  text: string;
+  blocks: SlackBlock[];
+}
 
 // Mock email sending (in production, use nodemailer/SendGrid/SES)
-async function sendEmail({ to, subject, html, text }) {
-  console.log("📧 Sending email:", { to, subject });
-  // In production: await transporter.sendMail({ to, subject, html, text });
+export async function sendEmail(
+  payload: EmailPayload,
+): Promise<DeliveryResult> {
+  console.log("📧 Sending email:", {
+    to: payload.to,
+    subject: payload.subject,
+  });
+  // In production: await transporter.sendMail(payload);
   return {
     success: true,
     messageId: `email_${Date.now()}`,
@@ -15,12 +47,14 @@ async function sendEmail({ to, subject, html, text }) {
 }
 
 // Mock Slack webhook (in production, use actual webhook URL)
-async function sendSlackMessage({ channel, text, blocks }) {
+export async function sendSlackMessage(
+  payload: SlackMessagePayload,
+): Promise<DeliveryResult> {
   console.log("💬 Sending Slack message:", {
-    channel,
-    text: text?.substring(0, 50),
+    channel: payload.channel,
+    text: payload.text?.substring(0, 50),
   });
-  // In production: await fetch(webhookUrl, { method: 'POST', body: JSON.stringify({ text, blocks }) });
+  // In production: await fetch(webhookUrl, { method: 'POST', body: JSON.stringify(payload) });
   return {
     success: true,
     messageId: `slack_${Date.now()}`,
@@ -29,15 +63,10 @@ async function sendSlackMessage({ channel, text, blocks }) {
 }
 
 // Generate Weekly Exec Brief HTML email
-function generateWeeklyBriefEmail(data) {
+export function generateWeeklyBriefEmail(
+  data: WeeklyBriefData,
+): GeneratedEmail {
   const { summary, kpis, anomalies, decisions } = data;
-
-  const highlightColors = {
-    success: "#10b981",
-    warning: "#f59e0b",
-    info: "#3b82f6",
-    danger: "#ef4444",
-  };
 
   const kpiHtml = kpis
     .slice(0, 4)
@@ -148,7 +177,7 @@ function generateWeeklyBriefEmail(data) {
 
     <!-- Footer -->
     <div style="text-align: center; border-top: 1px solid #334155; padding-top: 24px; margin-top: 32px;">
-      <a href="${config.appUrl || "http://localhost:3003"}" style="display: inline-block; background: #3b82f6; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">View Dashboard</a>
+      <a href="${config.appUrl}" style="display: inline-block; background: #3b82f6; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">View Dashboard</a>
       <p style="color: #64748b; margin: 16px 0 0 0; font-size: 12px;">OpsRep • Your AI Operations Assistant</p>
     </div>
   </div>
@@ -191,15 +220,15 @@ ${
     : ""
 }
 
-View dashboard: ${config.appUrl || "http://localhost:3003"}
+View dashboard: ${config.appUrl}
   `.trim();
 
   return { html, text };
 }
 
 // Generate Slack message blocks for critical alert
-function generateSlackAlertBlocks(anomaly) {
-  const severityEmoji = {
+export function generateSlackAlertBlocks(anomaly: Anomaly): SlackAlertMessage {
+  const severityEmoji: Record<Anomaly["severity"], string> = {
     high: "🔴",
     medium: "🟠",
     low: "🟡",
@@ -259,7 +288,7 @@ function generateSlackAlertBlocks(anomaly) {
               text: "View in Dashboard",
               emoji: true,
             },
-            url: `${config.appUrl || "http://localhost:3003"}/kpis`,
+            url: `${config.appUrl}/kpis`,
             action_id: "view_dashboard",
           },
         ],
@@ -269,7 +298,10 @@ function generateSlackAlertBlocks(anomaly) {
 }
 
 // Send weekly brief to configured recipients
-async function sendWeeklyBrief(data, recipients = []) {
+export async function sendWeeklyBrief(
+  data: WeeklyBriefData,
+  recipients: string[] = [],
+): Promise<DeliveryResult> {
   const { html, text } = generateWeeklyBriefEmail(data);
 
   const results = await Promise.all(
@@ -291,26 +323,19 @@ async function sendWeeklyBrief(data, recipients = []) {
 }
 
 // Send critical alert to Slack
-async function sendCriticalAlertToSlack(anomaly, channel = "#ops-alerts") {
+export async function sendCriticalAlertToSlack(
+  anomaly: Anomaly,
+  channel = "#ops-alerts",
+): Promise<DeliveryResult> {
   const message = generateSlackAlertBlocks(anomaly);
   return sendSlackMessage({ channel, ...message });
 }
 
 // Check if anomaly qualifies as critical (high severity + high confidence)
-function isCriticalAlert(anomaly) {
+export function isCriticalAlert(anomaly: Anomaly): boolean {
   return (
     anomaly.severity === "high" &&
     anomaly.impact?.confidence === "high" &&
     anomaly.status !== "resolved"
   );
 }
-
-module.exports = {
-  sendEmail,
-  sendSlackMessage,
-  generateWeeklyBriefEmail,
-  generateSlackAlertBlocks,
-  sendWeeklyBrief,
-  sendCriticalAlertToSlack,
-  isCriticalAlert,
-};

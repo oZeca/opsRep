@@ -1,12 +1,45 @@
 // Data Service Layer
 // Switches between mock and real data based on configuration
 
-const config = require("../config");
-const mockData = require("../data/mockData");
+import config from "../config/index.js";
+import * as mockData from "../data/mockData.js";
+import type {
+  User,
+  Summary,
+  KPI,
+  Anomaly,
+  QAResponse,
+  Decision,
+  WeeklyChangelog,
+} from "../types/index.js";
+
+// Real data service interface - implement these when connecting to actual sources
+interface RealDataService {
+  getUser(): Promise<User>;
+  getIntegrations(): Promise<unknown[]>;
+  updateIntegration(id: string, updates: Partial<unknown>): Promise<unknown>;
+  getSummaries(type?: string): Promise<Summary[]>;
+  getSummaryById(id: string): Promise<Summary | null>;
+  getKPIs(category?: string): Promise<KPI[]>;
+  getAnomalies(status?: string): Promise<Anomaly[]>;
+  askQuestion(question: string): Promise<QAResponse>;
+  getQAHistory(): Promise<QAResponse[]>;
+  getDecisions(status?: string): Promise<Decision[]>;
+  getDecisionById(id: string): Promise<Decision | null>;
+  updateDecision(id: string, updates: Partial<Decision>): Promise<Decision>;
+  createDecision(
+    data: Omit<
+      Decision,
+      "id" | "status" | "suggestedAt" | "acceptedAt" | "completedAt"
+    >,
+  ): Promise<Decision>;
+  getDecisionsForAnomaly(anomalyId: string): Promise<Decision[]>;
+  getWeeklyChangelog(): Promise<WeeklyChangelog>;
+}
 
 // Real data service stubs - implement these when connecting to actual sources
-const realDataService = {
-  async getUser() {
+const realDataService: RealDataService = {
+  async getUser(): Promise<User> {
     throw new Error(
       "Real data service not implemented - connect to your auth provider",
     );
@@ -16,31 +49,93 @@ const realDataService = {
       "Real data service not implemented - connect to your integration manager",
     );
   },
-  async getSummaries() {
+  async updateIntegration(_id: string, _updates: Partial<unknown>) {
+    throw new Error("Real data service not implemented");
+  },
+  async getSummaries(_type?: string) {
     throw new Error(
       "Real data service not implemented - connect to AI summary generator",
     );
   },
-  async getKPIs() {
+  async getSummaryById(_id: string) {
+    throw new Error("Real data service not implemented");
+  },
+  async getKPIs(_category?: string) {
     throw new Error(
       "Real data service not implemented - connect to your data sources",
     );
   },
-  async getAnomalies() {
+  async getAnomalies(_status?: string) {
     throw new Error(
       "Real data service not implemented - connect to anomaly detection service",
     );
   },
-  async askQuestion(question) {
+  async askQuestion(_question: string) {
     throw new Error(
       "Real data service not implemented - connect to RAG pipeline",
     );
   },
+  async getQAHistory() {
+    throw new Error("Real data service not implemented");
+  },
+  async getDecisions(_status?: string) {
+    throw new Error("Real data service not implemented");
+  },
+  async getDecisionById(_id: string) {
+    throw new Error("Real data service not implemented");
+  },
+  async updateDecision(_id: string, _updates: Partial<Decision>) {
+    throw new Error("Real data service not implemented");
+  },
+  async createDecision(
+    _data: Omit<
+      Decision,
+      "id" | "status" | "suggestedAt" | "acceptedAt" | "completedAt"
+    >,
+  ) {
+    throw new Error("Real data service not implemented");
+  },
+  async getDecisionsForAnomaly(_anomalyId: string) {
+    throw new Error("Real data service not implemented");
+  },
+  async getWeeklyChangelog() {
+    throw new Error("Real data service not implemented");
+  },
 };
 
+// DataService interface
+export interface DataService {
+  getUser(): Promise<User>;
+  getIntegrations(): Promise<unknown[]>;
+  updateIntegration(
+    integrationId: string,
+    updates: Partial<unknown>,
+  ): Promise<unknown>;
+  getSummaries(type?: string): Promise<Summary[]>;
+  getSummaryById(id: string): Promise<Summary | null>;
+  getKPIs(category?: string): Promise<KPI[]>;
+  getAnomalies(status?: string): Promise<Anomaly[]>;
+  askQuestion(question: string): Promise<QAResponse>;
+  getQAHistory(): Promise<QAResponse[]>;
+  getDecisions(status?: string): Promise<Decision[]>;
+  getDecisionById(id: string): Promise<Decision | null>;
+  updateDecision(
+    decisionId: string,
+    updates: Partial<Decision>,
+  ): Promise<Decision>;
+  createDecision(
+    decisionData: Omit<
+      Decision,
+      "id" | "status" | "suggestedAt" | "acceptedAt" | "completedAt"
+    >,
+  ): Promise<Decision>;
+  getDecisionsForAnomaly(anomalyId: string): Promise<Decision[]>;
+  getWeeklyChangelog(): Promise<WeeklyChangelog>;
+}
+
 // Public API
-const dataService = {
-  async getUser() {
+const dataService: DataService = {
+  async getUser(): Promise<User> {
     if (config.useMockData) {
       return mockData.mockUser;
     }
@@ -54,7 +149,7 @@ const dataService = {
     return realDataService.getIntegrations();
   },
 
-  async updateIntegration(integrationId, updates) {
+  async updateIntegration(integrationId: string, updates: Partial<unknown>) {
     if (config.useMockData) {
       const integration = mockData.mockIntegrations.find(
         (i) => i.id === integrationId,
@@ -68,7 +163,7 @@ const dataService = {
     return realDataService.updateIntegration(integrationId, updates);
   },
 
-  async getSummaries(type = "all") {
+  async getSummaries(type = "all"): Promise<Summary[]> {
     if (config.useMockData) {
       if (type === "all") {
         return mockData.mockSummaries;
@@ -78,14 +173,14 @@ const dataService = {
     return realDataService.getSummaries(type);
   },
 
-  async getSummaryById(id) {
+  async getSummaryById(id: string): Promise<Summary | null> {
     if (config.useMockData) {
       return mockData.mockSummaries.find((s) => s.id === id) || null;
     }
     return realDataService.getSummaryById(id);
   },
 
-  async getKPIs(category = "all") {
+  async getKPIs(category = "all"): Promise<KPI[]> {
     if (config.useMockData) {
       if (category === "all") {
         return mockData.mockKPIs;
@@ -95,7 +190,7 @@ const dataService = {
     return realDataService.getKPIs(category);
   },
 
-  async getAnomalies(status = "all") {
+  async getAnomalies(status = "all"): Promise<Anomaly[]> {
     if (config.useMockData) {
       if (status === "all") {
         return mockData.mockAnomalies;
@@ -105,7 +200,7 @@ const dataService = {
     return realDataService.getAnomalies(status);
   },
 
-  async askQuestion(question) {
+  async askQuestion(question: string): Promise<QAResponse> {
     if (config.useMockData) {
       // Simulate AI response with mock data
       const similarQuestion = mockData.mockQAHistory.find((qa) =>
@@ -136,14 +231,14 @@ const dataService = {
     return realDataService.askQuestion(question);
   },
 
-  async getQAHistory() {
+  async getQAHistory(): Promise<QAResponse[]> {
     if (config.useMockData) {
       return mockData.mockQAHistory;
     }
     return realDataService.getQAHistory();
   },
 
-  async getDecisions(status = "all") {
+  async getDecisions(status = "all"): Promise<Decision[]> {
     if (config.useMockData) {
       if (status === "all") {
         return mockData.mockDecisions;
@@ -153,14 +248,17 @@ const dataService = {
     return realDataService.getDecisions(status);
   },
 
-  async getDecisionById(id) {
+  async getDecisionById(id: string): Promise<Decision | null> {
     if (config.useMockData) {
       return mockData.mockDecisions.find((d) => d.id === id) || null;
     }
     return realDataService.getDecisionById(id);
   },
 
-  async updateDecision(decisionId, updates) {
+  async updateDecision(
+    decisionId: string,
+    updates: Partial<Decision>,
+  ): Promise<Decision> {
     if (config.useMockData) {
       const decision = mockData.mockDecisions.find((d) => d.id === decisionId);
       if (decision) {
@@ -179,9 +277,14 @@ const dataService = {
     return realDataService.updateDecision(decisionId, updates);
   },
 
-  async createDecision(decisionData) {
+  async createDecision(
+    decisionData: Omit<
+      Decision,
+      "id" | "status" | "suggestedAt" | "acceptedAt" | "completedAt"
+    >,
+  ): Promise<Decision> {
     if (config.useMockData) {
-      const newDecision = {
+      const newDecision: Decision = {
         id: `dec_${Date.now()}`,
         ...decisionData,
         status: "suggested",
@@ -195,7 +298,7 @@ const dataService = {
     return realDataService.createDecision(decisionData);
   },
 
-  async getDecisionsForAnomaly(anomalyId) {
+  async getDecisionsForAnomaly(anomalyId: string): Promise<Decision[]> {
     if (config.useMockData) {
       return mockData.mockDecisions.filter(
         (d) => d.source.type === "anomaly" && d.source.id === anomalyId,
@@ -204,7 +307,7 @@ const dataService = {
     return realDataService.getDecisionsForAnomaly(anomalyId);
   },
 
-  async getWeeklyChangelog() {
+  async getWeeklyChangelog(): Promise<WeeklyChangelog> {
     if (config.useMockData) {
       return mockData.mockWeeklyChangelog;
     }
@@ -212,4 +315,4 @@ const dataService = {
   },
 };
 
-module.exports = dataService;
+export default dataService;

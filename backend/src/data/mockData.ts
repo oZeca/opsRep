@@ -1,7 +1,34 @@
 // Mock data for Internal Ops / Reporting Automation Demo
 // This data simulates a B2B SaaS company's operations
 
-const mockUser = {
+import type {
+  User,
+  Summary,
+  KPI,
+  Anomaly,
+  QAResponse,
+  Decision,
+  WeeklyChangelog,
+} from "../types/index.js";
+
+// Extended integration type for mock data (more fields than base type)
+interface MockIntegration {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  lastSync: string | null;
+  icon: string;
+  channelsConnected?: number;
+  messagesIndexed?: number;
+  pagesIndexed?: number;
+  databasesConnected?: number;
+  transactionsTracked?: number;
+  mrr?: number;
+  serversConnected?: number;
+}
+
+export const mockUser: User = {
   id: "usr_001",
   name: "Sarah Chen",
   email: "sarah@acmesaas.com",
@@ -10,7 +37,7 @@ const mockUser = {
   avatar: null,
 };
 
-const mockIntegrations = [
+export const mockIntegrations: MockIntegration[] = [
   {
     id: "int_slack",
     name: "Slack",
@@ -69,7 +96,7 @@ const mockIntegrations = [
   },
 ];
 
-const mockSummaries = [
+export const mockSummaries: Summary[] = [
   {
     id: "sum_w03_2026",
     type: "weekly",
@@ -163,7 +190,7 @@ const mockSummaries = [
   },
 ];
 
-const mockKPIs = [
+export const mockKPIs: KPI[] = [
   {
     id: "kpi_mrr",
     name: "Monthly Recurring Revenue",
@@ -201,7 +228,7 @@ const mockKPIs = [
     value: 2.1,
     previousValue: 2.8,
     unit: "%",
-    format: "percentage",
+    format: "percent",
     change: -25.0,
     changeType: "positive",
     trend: [3.2, 2.9, 2.6, 2.8, 2.1],
@@ -246,7 +273,7 @@ const mockKPIs = [
     value: 4.2,
     previousValue: 2.8,
     unit: "hours",
-    format: "duration",
+    format: "hours",
     change: 50.0,
     changeType: "negative",
     trend: [2.1, 2.4, 2.5, 2.8, 4.2],
@@ -285,7 +312,7 @@ const mockKPIs = [
   },
 ];
 
-const mockAnomalies = [
+export const mockAnomalies: Anomaly[] = [
   {
     id: "anom_001",
     severity: "high",
@@ -368,7 +395,7 @@ const mockAnomalies = [
   },
 ];
 
-const mockQAHistory = [
+export const mockQAHistory: QAResponse[] = [
   {
     id: "qa_001",
     question: "What were the main customer complaints last week?",
@@ -398,7 +425,7 @@ const mockQAHistory = [
   },
 ];
 
-const mockDecisions = [
+export const mockDecisions: Decision[] = [
   {
     id: "dec_001",
     title: "Pause feature rollout until support backlog < 120 tickets",
@@ -470,7 +497,7 @@ const mockDecisions = [
   },
 ];
 
-const mockWeeklyChangelog = {
+export const mockWeeklyChangelog: WeeklyChangelog = {
   period: "Week 3, 2026",
   dateRange: "Jan 13 - Jan 19, 2026",
   generatedAt: "2026-01-19T18:00:00Z",
@@ -547,15 +574,4 @@ const mockWeeklyChangelog = {
   ],
   summary:
     "This week saw strong MRR growth (+12%) offset by a support ticket spike (+34%) following the v2.3 release. Key decisions: paused feature rollout, hired temp support, enabled auto-responses. The response time issue is being actively addressed.",
-};
-
-module.exports = {
-  mockUser,
-  mockIntegrations,
-  mockSummaries,
-  mockKPIs,
-  mockAnomalies,
-  mockQAHistory,
-  mockDecisions,
-  mockWeeklyChangelog,
 };

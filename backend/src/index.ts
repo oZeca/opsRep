@@ -1,7 +1,7 @@
-const express = require("express");
-const cors = require("cors");
-const config = require("./config");
-const apiRoutes = require("./routes/api");
+import express from "express";
+import cors from "cors";
+import config from "./config/index.js";
+import apiRoutes from "./routes/api.js";
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.use(express.json());
 app.use("/api", apiRoutes);
 
 // Health check
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
     useMockData: config.useMockData,
