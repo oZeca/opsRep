@@ -8,6 +8,7 @@ const navItems = [
   { href: "/", label: "Dashboard", icon: "dashboard" },
   { href: "/summaries", label: "Summaries", icon: "summary" },
   { href: "/kpis", label: "KPIs", icon: "chart" },
+  { href: "/decisions", label: "Decisions", icon: "check" },
   { href: "/integrations", label: "Integrations", icon: "plug" },
   { href: "/ask", label: "Ask AI", icon: "sparkle" },
 ];
@@ -70,6 +71,21 @@ const icons: Record<string, JSX.Element> = {
         strokeLinejoin="round"
         strokeWidth={1.5}
         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+      />
+    </svg>
+  ),
+  check: (
+    <svg
+      className="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
       />
     </svg>
   ),

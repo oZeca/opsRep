@@ -109,6 +109,32 @@ export interface QAResponse {
   confidence: number;
 }
 
+export interface DecisionImpact {
+  revenueAtRisk: [number, number];
+  confidence: "low" | "medium" | "high";
+  consequence: string;
+}
+
+export interface DecisionSource {
+  type: "anomaly" | "summary" | "ai";
+  id: string;
+  title: string;
+}
+
+export interface Decision {
+  id: string;
+  title: string;
+  description: string;
+  owner: string;
+  dueDate: string;
+  source: DecisionSource;
+  status: "suggested" | "accepted" | "dismissed" | "done";
+  suggestedAt: string;
+  acceptedAt: string | null;
+  completedAt: string | null;
+  impact: DecisionImpact;
+}
+
 // API Functions
 export const api = {
   getUser: () => fetchAPI<User>("/user"),
@@ -139,4 +165,28 @@ export const api = {
     }),
 
   getQAHistory: () => fetchAPI<QAResponse[]>("/questions"),
+
+  // Decision APIs
+  getDecisions: (status?: string) =>
+    fetchAPI<Decision[]>(`/decisions${status ? `?status=${status}` : ""}`),
+
+  getDecisionsForAnomaly: (anomalyId: string) =>
+    fetchAPI<Decision[]>(`/anomalies/${anomalyId}/decisions`),
+
+  createDecision: (
+    decision: Omit<
+      Decision,
+      "id" | "status" | "suggestedAt" | "acceptedAt" | "completedAt"
+    >,
+  ) =>
+    fetchAPI<Decision>("/decisions", {
+      method: "POST",
+      body: JSON.stringify(decision),
+    }),
+
+  updateDecision: (id: string, updates: Partial<Decision>) =>
+    fetchAPI<Decision>(`/decisions/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updates),
+    }),
 };

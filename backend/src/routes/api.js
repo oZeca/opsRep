@@ -106,4 +106,48 @@ router.get("/questions", async (req, res) => {
   }
 });
 
+// Get all decisions
+router.get("/decisions", async (req, res) => {
+  try {
+    const { status } = req.query;
+    const decisions = await dataService.getDecisions(status);
+    res.json(decisions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get decisions for a specific anomaly
+router.get("/anomalies/:id/decisions", async (req, res) => {
+  try {
+    const decisions = await dataService.getDecisionsForAnomaly(req.params.id);
+    res.json(decisions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Create a new decision
+router.post("/decisions", async (req, res) => {
+  try {
+    const decision = await dataService.createDecision(req.body);
+    res.status(201).json(decision);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a decision (status, owner, etc.)
+router.patch("/decisions/:id", async (req, res) => {
+  try {
+    const decision = await dataService.updateDecision(req.params.id, req.body);
+    res.json(decision);
+  } catch (error) {
+    if (error.message === "Decision not found") {
+      return res.status(404).json({ error: error.message });
+    }
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

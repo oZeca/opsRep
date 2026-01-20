@@ -1,11 +1,15 @@
 "use client";
 
-import type { Anomaly } from "@/lib/api";
+import { useEffect, useState } from "react";
+import type { Anomaly, Decision } from "@/lib/api";
+import { api } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
+import { SuggestedAction } from "@/components/SuggestedAction";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 
 interface AnomalyAlertProps {
   anomaly: Anomaly;
+  showSuggestedAction?: boolean;
 }
 
 const severityConfig = {
@@ -41,9 +45,36 @@ const statusConfig = {
   },
 };
 
-export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
+export function AnomalyAlert({
+  anomaly,
+  showSuggestedAction = true,
+}: AnomalyAlertProps) {
+  const [decisions, setDecisions] = useState<Decision[]>([]);
+  const [loadingDecisions, setLoadingDecisions] = useState(false);
+
   const severity = severityConfig[anomaly.severity];
   const status = statusConfig[anomaly.status];
+
+  useEffect(() => {
+    if (showSuggestedAction && anomaly.status !== "resolved") {
+      setLoadingDecisions(true);
+      api
+        .getDecisionsForAnomaly(anomaly.id)
+        .then(setDecisions)
+        .catch(console.error)
+        .finally(() => setLoadingDecisions(false));
+    }
+  }, [anomaly.id, anomaly.status, showSuggestedAction]);
+
+  const handleDecisionUpdate = (updated: Decision) => {
+    setDecisions((prev) =>
+      prev.map((d) => (d.id === updated.id ? updated : d)),
+    );
+  };
+
+  // Get the first suggested decision to show
+  const suggestedDecision = decisions.find((d) => d.status === "suggested");
+  const acceptedDecisions = decisions.filter((d) => d.status !== "suggested");
 
   return (
     <div
@@ -129,6 +160,28 @@ export function AnomalyAlert({ anomaly }: AnomalyAlertProps) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Suggested Decision */}
+      {showSuggestedAction && suggestedDecision && (
+        <SuggestedAction
+          decision={suggestedDecision}
+          onUpdate={handleDecisionUpdate}
+        />
+      )}
+
+      {/* Show accepted decisions as compact badges */}
+      {showSuggestedAction && acceptedDecisions.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {acceptedDecisions.map((d) => (
+            <SuggestedAction
+              key={d.id}
+              decision={d}
+              onUpdate={handleDecisionUpdate}
+              compact
+            />
+          ))}
         </div>
       )}
 

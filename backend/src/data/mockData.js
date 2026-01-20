@@ -380,6 +380,78 @@ const mockQAHistory = [
   },
 ];
 
+const mockDecisions = [
+  {
+    id: "dec_001",
+    title: "Pause feature rollout until support backlog < 120 tickets",
+    description:
+      "Support tickets are 34% above normal. Pausing the scheduled rollout prevents further escalation and gives the team time to clear the backlog.",
+    owner: "Head of Support",
+    dueDate: "2026-01-24",
+    source: {
+      type: "anomaly",
+      id: "anom_001",
+      title: "Support Ticket Spike Detected",
+    },
+    status: "suggested",
+    suggestedAt: "2026-01-19T10:35:00Z",
+    acceptedAt: null,
+    completedAt: null,
+    impact: {
+      revenueAtRisk: [8000, 15000],
+      confidence: "medium",
+      consequence:
+        "If ignored, this may lead to SLA breaches within 7–10 days.",
+    },
+  },
+  {
+    id: "dec_002",
+    title: "Enable auto-responses for common support questions",
+    description:
+      "Response time has increased 50%. Implementing auto-responses for the top 10 FAQ questions could reduce load by 25%.",
+    owner: "Head of Support",
+    dueDate: "2026-01-22",
+    source: {
+      type: "anomaly",
+      id: "anom_002",
+      title: "Response Time Degradation",
+    },
+    status: "accepted",
+    suggestedAt: "2026-01-18T14:05:00Z",
+    acceptedAt: "2026-01-18T16:30:00Z",
+    completedAt: null,
+    impact: {
+      revenueAtRisk: [3000, 6000],
+      confidence: "high",
+      consequence:
+        "Continued delays may result in 2-3 customer escalations per day.",
+    },
+  },
+  {
+    id: "dec_003",
+    title: "Hire temporary support contractor for 2 weeks",
+    description:
+      "With Maria on sick leave and ticket volume spiking, a temporary contractor can help maintain SLA compliance.",
+    owner: "VP Operations",
+    dueDate: "2026-01-21",
+    source: {
+      type: "anomaly",
+      id: "anom_001",
+      title: "Support Ticket Spike Detected",
+    },
+    status: "done",
+    suggestedAt: "2026-01-18T11:00:00Z",
+    acceptedAt: "2026-01-18T14:00:00Z",
+    completedAt: "2026-01-19T09:00:00Z",
+    impact: {
+      revenueAtRisk: [5000, 10000],
+      confidence: "high",
+      consequence:
+        "Without additional capacity, response times will exceed SLA by Jan 22.",
+    },
+  },
+];
+
 module.exports = {
   mockUser,
   mockIntegrations,
@@ -387,4 +459,5 @@ module.exports = {
   mockKPIs,
   mockAnomalies,
   mockQAHistory,
+  mockDecisions,
 };

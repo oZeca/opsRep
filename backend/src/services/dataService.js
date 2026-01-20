@@ -142,6 +142,67 @@ const dataService = {
     }
     return realDataService.getQAHistory();
   },
+
+  async getDecisions(status = "all") {
+    if (config.useMockData) {
+      if (status === "all") {
+        return mockData.mockDecisions;
+      }
+      return mockData.mockDecisions.filter((d) => d.status === status);
+    }
+    return realDataService.getDecisions(status);
+  },
+
+  async getDecisionById(id) {
+    if (config.useMockData) {
+      return mockData.mockDecisions.find((d) => d.id === id) || null;
+    }
+    return realDataService.getDecisionById(id);
+  },
+
+  async updateDecision(decisionId, updates) {
+    if (config.useMockData) {
+      const decision = mockData.mockDecisions.find((d) => d.id === decisionId);
+      if (decision) {
+        // Handle status transitions
+        if (updates.status === "accepted" && decision.status === "suggested") {
+          updates.acceptedAt = new Date().toISOString();
+        }
+        if (updates.status === "done" && decision.status === "accepted") {
+          updates.completedAt = new Date().toISOString();
+        }
+        Object.assign(decision, updates);
+        return decision;
+      }
+      throw new Error("Decision not found");
+    }
+    return realDataService.updateDecision(decisionId, updates);
+  },
+
+  async createDecision(decisionData) {
+    if (config.useMockData) {
+      const newDecision = {
+        id: `dec_${Date.now()}`,
+        ...decisionData,
+        status: "suggested",
+        suggestedAt: new Date().toISOString(),
+        acceptedAt: null,
+        completedAt: null,
+      };
+      mockData.mockDecisions.push(newDecision);
+      return newDecision;
+    }
+    return realDataService.createDecision(decisionData);
+  },
+
+  async getDecisionsForAnomaly(anomalyId) {
+    if (config.useMockData) {
+      return mockData.mockDecisions.filter(
+        (d) => d.source.type === "anomaly" && d.source.id === anomalyId,
+      );
+    }
+    return realDataService.getDecisionsForAnomaly(anomalyId);
+  },
 };
 
 module.exports = dataService;
